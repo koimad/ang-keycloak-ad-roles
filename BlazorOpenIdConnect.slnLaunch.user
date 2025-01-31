@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "AngApp\\AngApp.Server\\AngApp.Server.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "ExternalService\\ExternalService.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

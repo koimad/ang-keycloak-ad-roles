@@ -1,0 +1,45 @@
+<div class="section">
+  <header>
+    <h1>Angular Keycloak Roles Demo App!</h1>
+    <p class="description">This is the public homepage of the application.</p>
+  </header>
+
+  <main>
+    <section>
+      <p class="description">To login to the application, use the following credentials for testing:</p>
+      <ul class="credentials">
+        <li>
+          <strong>User:</strong> <code>myuser</code>
+          <button class="copy-btn" (click)="copyToClipboard('myuser')" aria-label="Copy User">
+            <i class="copy-icon">📋</i>
+          </button>
+        </li>
+        <li>
+          <strong>Password:</strong> <code>Password</code>
+          <button class="copy-btn" (click)="copyToClipboard('Password')" aria-label="Copy Password">
+            <i class="copy-icon">📋</i>
+          </button>
+        </li>
+
+        <li>
+          <strong>User:</strong> <code>model1</code>  (Active Directory Imported User - only with model1 role and models-user)
+          <button class="copy-btn" (click)="copyToClipboard('myuser')" aria-label="Copy User">
+            <i class="copy-icon">📋</i>
+          </button>
+        </li>
+        <li>
+          <strong>Password:</strong> <code>Pass&#64;word10</code>
+          <button class="copy-btn" (click)="copyToClipboard('Password')" aria-label="Copy Password">
+            <i class="copy-icon">📋</i>
+          </button>
+        </li>
+
+      </ul>
+      
+    </section>
+
+    <div *ngIf="copyMessage$ | async as copyMessage" class="message-box">
+      {{ copyMessage }}
+    </div>
+  </main>
+</div>

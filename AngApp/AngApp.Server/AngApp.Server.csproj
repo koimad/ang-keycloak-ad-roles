@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <SpaRoot>..\angapp.client</SpaRoot>
+    <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
+    <SpaProxyServerUrl>https://localhost:52947</SpaProxyServerUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
+      <Version>9.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.ServiceDiscovery.Yarp" Version="9.0.0" />
+    <PackageReference Include="System.Text.Json" Version="9.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\AuthorisationPolicies\AuthorisationPolicies.csproj" />
+    <ProjectReference Include="..\angapp.client\angapp.client.esproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>

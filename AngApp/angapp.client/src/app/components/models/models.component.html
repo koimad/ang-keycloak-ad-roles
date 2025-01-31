@@ -1,0 +1,30 @@
+<div class="section">
+  <header>
+    <h1>Welcome, {{ user?.name }}</h1>
+    <p class="description">
+      This page is protected by an Auth Guard and uses the <code>HasRolesEnabled</code> directive to restrict
+      access based on user roles.
+      These roles can be client roles or realm roles if the <code>hasRolesEnabledCheckRealm</code> input is set to <code>true</code>.
+    </p>
+    <p class="description">
+      Below is a set of models that can be invoked based on the users realm role or the client role.
+    </p>
+  </header>
+
+  <main>
+    <section class="profile-card">
+      <h2>Models</h2>
+      <div class="buttongrp">
+        <button name="model1" [hasRolesEnabled]="['model-one']" [hasRolesEnabledCheckRealm]="true" (click)="RunModel(1)">Model 1 (Client Role)</button>
+        <button name="model2" [hasRolesEnabled]="['model-two']" [hasRolesEnabledCheckRealm]="true" (click)="RunModel(2)">Model 2 (Client Role)</button>
+        <button name="model3" [hasRolesEnabled]="['model-three']" [hasRolesEnabledCheckRealm]="true" (click)="RunModel(3)">Model 3 (Realm Role)</button>
+        <button name="model4" [hasRolesEnabled]="['model-four']" [hasRolesEnabledCheckRealm]="true" (click)="RunModel(4)">Model 4 (Realm Role)</button>
+      </div>
+
+      <div class="model-output">
+        <h3>Model Output</h3>
+        <p>{{ modelResponse }}</p>
+      </div>
+    </section>
+  </main>
+</div>
