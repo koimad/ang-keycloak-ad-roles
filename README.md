@@ -6,7 +6,6 @@ To get key cloak up and running use the below command, together with saved keycl
 
 docker run -d --restart always --name keycloak -v c/temp/keycloak:/opt/keycloak/data -p 8080:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:26.0.5 start-dev
 
-
 The Visual studio solution containers a angular application hosted from AngApp.Server and a Angular Client application angapp.client
 
 The API endpoints for Model1, Model2,Model3, and Model4 are hosted in ExternalServices

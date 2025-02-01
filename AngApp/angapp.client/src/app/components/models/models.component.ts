@@ -31,11 +31,34 @@ export class ModelsComponent implements OnInit {
     }
   }
 
-  handleError(error: HttpErrorResponse) {
+    private getServerErrorMessage(error: HttpErrorResponse): string {
+        switch (error.status) {
+            case 404: {
+                return `Not Found: ${error.message}`;
+            }
+            case 403: {
+                return `Access Denied: ${error.message}`;
+            }
+            case 500: {
+                return `Internal Server Error: ${error.message}`;
+            }
+            default: {
+                return `Unknown Server Error: ${error.message}`;
+            }
+
+        }
+    }
+
+  handleError(error : any) {
     console.log(error.statusText);
 
     if (error) {
-      this.modelResponse = error.statusText;
+        this.modelResponse = error.statusText;
+        if (error.error instanceof ErrorEvent) {
+            this.modelResponse = `Error: ${error.error.message}`;
+        } else {
+            this.modelResponse = this.getServerErrorMessage(error);
+        }
     }    
     return throwError(() => new Error('Something bad happened; please try again later.'));
   }

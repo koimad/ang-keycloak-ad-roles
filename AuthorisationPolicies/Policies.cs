@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Keycloak.AuthServices.Authorization;
+
+using Microsoft.AspNetCore.Authorization;
 
 namespace AuthorisationPolicies;
 
@@ -25,13 +27,22 @@ public class Policies
             .Build();
     }
 
-    public static AuthorizationPolicy RequiresModelsPolicy(String number)
+    public static AuthorizationPolicy RequiresRealmModelsPolicy(String number)
     {
         return new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser()
-            .RequireRole($"model-{number}")
+            .RequireRealmRoles($"model-{number}")
+            //.RequireRole($"model-{number}")
             .Build();
     }
 
+    public static AuthorizationPolicy RequiresResourceModelsPolicy(String number)
+    {
+        return new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser()
+            .RequireResourceRolesForClient("aspire-client", new[] {$"model-{number}"})
+            //.RequireRole($"model-{number}")
+            .Build();
+    }
 
 }
