@@ -5,6 +5,9 @@
     <!-- Allows the build (or compile) script located on package.json to run on Build -->
     <ShouldRunBuildScript>false</ShouldRunBuildScript>
     <!-- Folder where production build objects will be placed -->
-    <BuildOutputFolder>$(MSBuildProjectDirectory)\dist\angapp.client\browser\</BuildOutputFolder>
+    <BuildOutputFolder>$(MSBuildProjectDirectory)\dist\angapp.client\</BuildOutputFolder>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="dist\angapp.client\" />
+  </ItemGroup>
 </Project>

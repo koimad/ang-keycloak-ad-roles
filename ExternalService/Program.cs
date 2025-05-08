@@ -42,66 +42,44 @@ public class Program
             .AddKeycloakAuthorization()
             ;
         
-        builder.Services.AddKeycloakWebApiAuthentication(options =>
-        {
-            options.AuthServerUrl = "http://localhost:8080";
-            options.Realm = "Aspirations";
-            options.Resource = "aspire-client";
-            options.SslRequired = "none";
-            options.VerifyTokenAudience = true;
-        }, jwtOptions =>
-        {
-            jwtOptions.TokenValidationParameters.ValidateIssuerSigningKey = true;
-            jwtOptions.TokenValidationParameters.ValidateLifetime = true;
-            
-            jwtOptions.Events = new JwtBearerEvents()
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
-                OnForbidden = context =>
-                {
-                    // add headers since the default middleware does not add them
-                    context.Response.Headers.Append("Access-Control-Allow-Origin", $"{context.Request.Headers["Origin"]}");
-                    return Task.CompletedTask;
-                }
-            };
-        });
+                options.Authority = "http://localhost:8080/realms/Aspirations";
+                options.MetadataAddress = "http://localhost:8080/realms/Aspirations/.well-known/openid-configuration";
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters.NameClaimType = ClaimTypes.Name;
+                options.TokenValidationParameters.RoleClaimType = ClaimTypes.Role;
+                options.TokenValidationParameters.ValidateIssuer = true;
+                options.TokenValidationParameters.ValidateIssuerSigningKey = true;
+                options.TokenValidationParameters.ValidateAudience = true;
+                options.TokenValidationParameters.ValidateLifetime = true;
+                options.Audience = "aspire-client";
+                options.MapInboundClaims = true;
 
-        //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        //    .AddJwtBearer(options =>
-        //    {
-        //        options.Authority = "http://localhost:8080/realms/Aspirations";
-        //        options.MetadataAddress = "http://localhost:8080/realms/Aspirations/.well-known/openid-configuration";
-        //        options.RequireHttpsMetadata = false;
-        //        options.TokenValidationParameters.NameClaimType = ClaimTypes.Name;
-        //        options.TokenValidationParameters.RoleClaimType = ClaimTypes.Role;
-        //        options.TokenValidationParameters.ValidateIssuer = true;
-        //        options.TokenValidationParameters.ValidateIssuerSigningKey = true;
-        //        options.TokenValidationParameters.ValidateAudience = true;
-        //        options.TokenValidationParameters.ValidateLifetime = true;
-        //        options.Audience = "aspire-client";
-        //        //options.MapInboundClaims = true;
-
-        //        options.Events = new JwtBearerEvents() {
-        //            OnForbidden = context =>
-        //            {
-        //                // add headers since the default middleware does not add them
-        //                context.Response.Headers.Append("Access-Control-Allow-Origin", $"{context.Request.Headers["Origin"]}");
-        //                return Task.CompletedTask;
-        //            }
-        //        };
-        //    });
+                //options.Events = new JwtBearerEvents()
+                //{
+                //    OnForbidden = context =>
+                //    {
+                //        // add headers since the default middleware does not add them
+                //        context.Response.Headers.Append("Access-Control-Allow-Origin", $"{context.Request.Headers["Origin"]}");
+                //        return Task.CompletedTask;
+                //    }
+                //};
+            });
 
         builder.Services.AddCors(options =>
         {
             options.AddPolicy(name: "All",
                 policy =>
                 {
-                    policy.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
+                    policy.WithOrigins("https://127.0.0.1:7297", "https://127.0.0.1:52947", "https://127.0.0.1:7052",
+                            "https://localhost:7297", "https://localhost:52947", "https://localhost:7052")
+                        .WithMethods("GET")
+                        .WithHeaders("authorization", "*")
                         ;
                 });
         });
-
 
         WebApplication app = builder.Build();
 
@@ -114,10 +92,7 @@ public class Program
         app.MapGet("externalapi/bands", (HttpContext httpContext) => Results.Ok(GetBands()))
             .RequireAuthorization(Policies.RequiresModelsRolePolicy());
 
-        app.MapGet("externalapi/model1", (HttpContext httpContext) =>
-            {
-                return Results.Ok($"Hello {httpContext?.User?.Identity?.Name} from Model 1, the time is {DateTime.Now:F}");
-            })
+        app.MapGet("externalapi/model1", (HttpContext httpContext) => Results.Ok($"Hello {httpContext?.User?.Identity?.Name} from Model 1, the time is {DateTime.Now:F}"))
             .RequireAuthorization(Policies.RequiresRealmModelsPolicy("one"))
             ;
 

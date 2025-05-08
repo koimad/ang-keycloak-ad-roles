@@ -3,11 +3,11 @@
     "Name": "New Profile",
     "Projects": [
       {
-        "Path": "AngApp\\AngApp.Server\\AngApp.Server.csproj",
+        "Path": "ExternalService\\ExternalService.csproj",
         "Action": "Start"
       },
       {
-        "Path": "ExternalService\\ExternalService.csproj",
+        "Path": "AngApp\\AngApp.Server\\AngApp.Server.csproj",
         "Action": "Start"
       }
     ]

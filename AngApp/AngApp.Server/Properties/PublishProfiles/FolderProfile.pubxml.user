@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- https://go.microsoft.com/fwlink/?LinkID=208121. -->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Users\koima\source\repos\ang-keycloak-ad-roles\AngApp\AngApp.Server\bin\Release\net9.0\publish\</_PublishTargetUrl>
+    <History>True|2025-04-30T19:56:42.2210843Z||;True|2025-04-30T20:54:05.2811218+01:00||;True|2025-04-30T20:48:28.2370846+01:00||;True|2025-04-30T20:45:23.7091141+01:00||;True|2025-04-30T20:41:50.2745046+01:00||;False|2025-04-30T20:41:03.8133975+01:00||;False|2025-04-30T20:40:23.0724043+01:00||;True|2025-04-30T20:34:04.4389634+01:00||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

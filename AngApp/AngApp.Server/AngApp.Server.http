@@ -4,3 +4,11 @@ GET {{AngApp.Server_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+GET {{AngApp.Server_HostAddress}}/login
+Accept: application/json
+####
+
+POST {{AngApp.Server_HostAddress}}/logout
+Accept: application/json
+####
