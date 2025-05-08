@@ -1,47 +1,39 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import Keycloak from 'keycloak-js';
-import {
-  HasRolesDirective,  
-  KEYCLOAK_EVENT_SIGNAL,
-  KeycloakEventType,
-  typeEventArgs,
-  ReadyArgs
-} from 'keycloak-angular';
+ import { AuthService} from '../../services/AuthService'
 
 @Component({
   selector: 'app-menu',
-  imports: [RouterModule, HasRolesDirective],
+  imports: [RouterModule],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css']
 })
-export class MenuComponent {
+export class MenuComponent  {
   authenticated = false;
   keycloakStatus: string | undefined;
-  private readonly keycloak = inject(Keycloak);
-  private readonly keycloakSignal = inject(KEYCLOAK_EVENT_SIGNAL);
+  
+  private readonly authService = inject(AuthService) ;
 
   constructor() {
     effect(() => {
-      const keycloakEvent = this.keycloakSignal();
-
-      this.keycloakStatus = keycloakEvent.type;
-
-      if (keycloakEvent.type === KeycloakEventType.Ready) {
-        this.authenticated = typeEventArgs<ReadyArgs>(keycloakEvent.args);
+      this.authenticated = this.authService.authStateChanged();   
+      
+      if(this.authenticated)
+      {
+        this.keycloakStatus = "Logged In";
       }
-
-      if (keycloakEvent.type === KeycloakEventType.AuthLogout) {
-        this.authenticated = false;
+      else{
+        this.keycloakStatus = "Logged Out";
       }
+      
     });
   }
-
+     
   login() {
-    this.keycloak.login();
+    this.authService.login();          
   }
 
   logout() {
-    this.keycloak.logout();
+    this.authService.logout();    
   }
 }

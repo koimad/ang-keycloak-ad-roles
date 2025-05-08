@@ -21,7 +21,7 @@ export class HomeComponent implements OnDestroy {
         this.copyMessageSubject.next(`"${text}" copied to clipboard!`);
         timer(3000).subscribe(() => this.copyMessageSubject.next(null));
       })
-      .catch((err) => {
+      .catch(() => {
         this.copyMessageSubject.next('Failed to copy text. Please try again.');
       });
   }

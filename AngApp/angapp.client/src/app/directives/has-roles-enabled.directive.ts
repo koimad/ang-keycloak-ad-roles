@@ -1,43 +1,22 @@
 import { Directive, Input, TemplateRef, ViewContainerRef, inject, effect, OnChanges, SimpleChanges, ElementRef } from '@angular/core';
-import { KEYCLOAK_EVENT_SIGNAL, KeycloakEventType, typeEventArgs, ReadyArgs } from 'keycloak-angular';
-import Keycloak from 'keycloak-js';
-
+import { AuthService } from '../services/AuthService';
 
 @Directive({
     selector: '[hasRolesEnabled]'
 })
-export class HasRolesEnabledDirective implements OnChanges {
+export class HasRolesEnabledDirective  {
 
     @Input('hasRolesEnabled') roles: string[] = [];
 
-    @Input('hasRolesEnabledResource') resource?: string;
-
-    @Input('hasRolesEnabledCheckRealm') checkRealm: boolean = false;
-
-    constructor(
-        private elementRef: ElementRef,
-        private keycloak: Keycloak
-    ) {
-
-        const keycloakSignal = inject(KEYCLOAK_EVENT_SIGNAL);
-
-        effect(() => {
-            const keycloakEvent = keycloakSignal();
-            if (keycloakEvent.type !== KeycloakEventType.Ready) {
-                return;
-            }
-
-            const authenticated = typeEventArgs<ReadyArgs>(keycloakEvent.args);
-            if (authenticated) {
-                this.render();
-            }
-        });
+    constructor(private elementRef: ElementRef, private authService :AuthService) {
+         effect(() => {
+             const authenticated = authService.authStateChanged();;
+             if (authenticated) {
+                 this.render();
+             }
+         });
     }
-    ngOnChanges(changes: SimpleChanges): void {
-
-    }
-
-
+    
     private render(): void {
         const hasAccess = this.checkUserRoles();
         if (hasAccess) {
@@ -48,12 +27,8 @@ export class HasRolesEnabledDirective implements OnChanges {
 
     }
 
-
     private checkUserRoles(): boolean {
-        const hasResourceRole = this.roles.some((role) => this.keycloak.hasResourceRole(role, this.resource));
-
-        const hasRealmRole = this.checkRealm ? this.roles.some((role) => this.keycloak.hasRealmRole(role)) : false;
-
-        return hasResourceRole || hasRealmRole;
+       const hasRole = this.roles.some((role) => this.authService.isInRole(role));
+       return hasRole;       
     }
 }

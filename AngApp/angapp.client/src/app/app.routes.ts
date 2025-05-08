@@ -1,13 +1,19 @@
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
-
-import { canActivateAuthRole } from './guards/auth-role.guard';
 import { ModelsComponent } from './components/models/models.component';
+import { canActivateAuthRole } from './guards/auth-role.guard';
+import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 
 export const routes: Routes = [
-
-  { path: '', component: HomeComponent },
+  { 
+    path: '', 
+    component: HomeComponent,
+  },
+  {
+    path: 'home', 
+    component: HomeComponent
+  },
   {
     path: 'models',
     component: ModelsComponent,
@@ -20,9 +26,11 @@ export const routes: Routes = [
     canActivate: [canActivateAuthRole],
     data: { role: 'aspire-editor' }
   },
-  //{ path: 'forbidden', component: ForbiddenComponent },
-  //{ path: '**', component: NotFoundComponent }
+  { path: 'forbidden', component: ForbiddenComponent },
+  {
+    path: 'signout-callback-oidc',
+    redirectTo: 'home'
+  }
 
 ];
-
 
