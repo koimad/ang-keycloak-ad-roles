@@ -54,7 +54,6 @@ export class AuthService {
         this.isLoggedIn = false;
         this.user = null;
         this.authStateChanged.set(false);
-        
     }
 
     private refreshSessionStatus(): void {
@@ -69,8 +68,7 @@ export class AuthService {
                     this.markLoggedIn();
                 },
                 error: (_err) => {
-                    this.user = null;
-                    this.markLoggedOut();
+                     this.markLoggedOut();
                 }
             });
         }

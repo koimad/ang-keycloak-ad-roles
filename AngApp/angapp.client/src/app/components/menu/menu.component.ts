@@ -1,12 +1,16 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
- import { AuthService} from '../../services/AuthService'
+import { AuthService} from '../../services/AuthService'
+
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {MatToolbarModule} from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-menu',
-  imports: [RouterModule],
+  imports: [RouterModule, MatToolbarModule, MatButtonModule, MatIconModule],
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.css']
+  styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent  {
   authenticated = false;

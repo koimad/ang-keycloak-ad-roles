@@ -9,7 +9,7 @@ import { catchError, throwError } from 'rxjs';
     selector: 'app-models',
     imports: [HasRolesEnabledDirective],
     templateUrl: 'models.component.html',
-    styleUrls: [`models.component.css`],
+    styleUrls: [`models.component.scss`],
     providers: [HttpClient]
 })
 export class ModelsComponent {

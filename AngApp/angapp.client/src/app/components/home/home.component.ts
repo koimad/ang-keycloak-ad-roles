@@ -5,7 +5,7 @@ import { BehaviorSubject, timer } from 'rxjs';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  styleUrls: ['./home.component.scss'],
   imports: [CommonModule],
   standalone: true
   

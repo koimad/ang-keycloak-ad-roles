@@ -8,7 +8,7 @@ import { MenuComponent } from './components/menu/menu.component';
   selector: 'app-root',
   templateUrl: './app.component.html',
   standalone: true,
-  styleUrl: './app.component.css',
+  styleUrl: './app.component.scss',
   imports: [MenuComponent, RouterModule],
   providers: [HttpClient]
 })
