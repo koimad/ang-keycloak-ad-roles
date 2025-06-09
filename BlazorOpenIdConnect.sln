@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngApp.Server", "AngApp\Ang
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "angapp.client", "AngApp\angapp.client\angapp.client.esproj", "{71C6ADE7-C7DB-403B-884D-07E02093BA20}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OidcProxy.Net", "OidcProxy.Net\OidcProxy.Net.csproj", "{6BCD47A1-03AA-F3C2-9917-A0252314C99D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OidcProxy.Net.OpenIdConnect", "OidcProxy.Net.OpenIdConnect\OidcProxy.Net.OpenIdConnect.csproj", "{F6602446-5C59-39C7-557E-BDEBE54D6A62}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,8 +39,19 @@ Global
 		{71C6ADE7-C7DB-403B-884D-07E02093BA20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71C6ADE7-C7DB-403B-884D-07E02093BA20}.Release|Any CPU.Build.0 = Release|Any CPU
 		{71C6ADE7-C7DB-403B-884D-07E02093BA20}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{6BCD47A1-03AA-F3C2-9917-A0252314C99D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BCD47A1-03AA-F3C2-9917-A0252314C99D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BCD47A1-03AA-F3C2-9917-A0252314C99D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BCD47A1-03AA-F3C2-9917-A0252314C99D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6602446-5C59-39C7-557E-BDEBE54D6A62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6602446-5C59-39C7-557E-BDEBE54D6A62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6602446-5C59-39C7-557E-BDEBE54D6A62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6602446-5C59-39C7-557E-BDEBE54D6A62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {422ED087-721E-4C9B-BAB0-3C0E1DA43A23}
 	EndGlobalSection
 EndGlobal

@@ -1,17 +1,8 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
-
 using AuthorisationPolicies;
-
 using BlazorOpenIdConnect.Client.Models;
 
-using Keycloak.AuthServices.Authentication;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-
-using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Authorization;
 
 namespace ExternalService;
@@ -37,10 +28,14 @@ public class Program
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
         builder.Services.AddAuthorization()
-            .AddKeycloakAuthorization()
-            ;
+            .AddKeycloakAuthorization(options =>
+            {
+                //options.EnableRolesMapping = RolesClaimTransformationSource.Realm;
+                //options.RoleClaimType = KeycloakConstants.RoleClaimType;
+            })
+            .AddAuthorizationBuilder();
+            
         
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -56,16 +51,22 @@ public class Program
                 options.TokenValidationParameters.ValidateLifetime = true;
                 options.Audience = "aspire-client";
                 options.MapInboundClaims = true;
-
-                //options.Events = new JwtBearerEvents()
-                //{
-                //    OnForbidden = context =>
-                //    {
-                //        // add headers since the default middleware does not add them
-                //        context.Response.Headers.Append("Access-Control-Allow-Origin", $"{context.Request.Headers["Origin"]}");
-                //        return Task.CompletedTask;
-                //    }
-                //};
+                
+                options.Events = new JwtBearerEvents()
+                {
+                    OnForbidden = context =>
+                    {
+                        // add headers since the default middleware does not add them
+                        context.Response.Headers.Append("Access-Control-Allow-Origin", $"{context.Request.Headers["Origin"]}");
+                        return Task.CompletedTask;
+                    },
+                    OnAuthenticationFailed = context =>
+                    {
+                        // add headers since the default middleware does not add them
+                        context.Response.Headers.Append("Access-Control-Allow-Origin", $"{context.Request.Headers["Origin"]}");
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
         builder.Services.AddCors(options =>
@@ -93,19 +94,19 @@ public class Program
             .RequireAuthorization(Policies.RequiresModelsRolePolicy());
 
         app.MapGet("externalapi/model1", (HttpContext httpContext) => Results.Ok($"Hello {httpContext?.User?.Identity?.Name} from Model 1, the time is {DateTime.Now:F}"))
-            .RequireAuthorization(Policies.RequiresRealmModelsPolicy("one"))
+            .RequireAuthorization(Policies.RequiresResourceModelsPolicy("one"))
             ;
 
         app.MapGet("externalapi/model2", (HttpContext httpContext) => Results.Ok($"Hello {httpContext?.User?.Identity?.Name} from Model 2, the time is {DateTime.Now:F}"))
-            .RequireAuthorization(Policies.RequiresRealmModelsPolicy("two"))
+            .RequireAuthorization(Policies.RequiresResourceModelsPolicy("two"))
             ;
 
         app.MapGet("externalapi/model3", (HttpContext httpContext) => Results.Ok($"Hello {httpContext?.User?.Identity?.Name} from Model 3, the time is {DateTime.Now:F}"))
-            .RequireAuthorization(Policies.RequiresResourceModelsPolicy("three"))
+            .RequireAuthorization(Policies.RequiresRealmModelsPolicy("three"))
             ;
 
         app.MapGet("externalapi/model4", (HttpContext httpContext) => Results.Ok($"Hello {httpContext?.User?.Identity?.Name} from Model 4, the time is {DateTime.Now:F}"))
-            .RequireAuthorization(Policies.RequiresResourceModelsPolicy("four"))
+            .RequireAuthorization(Policies.RequiresRealmModelsPolicy("four"))
             ;
 
         app.Run();

@@ -3,3 +3,6 @@
 **/.vs
 **/.angular/cache
 **/node_modules
+**/**/dist
+AngApp/angapp.client/dist/angapp.client/3rdpartylicenses.txt
+AngApp/angapp.client/dist/

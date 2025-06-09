@@ -9,11 +9,17 @@
   </header>
 
   <main>
-    <section class="profile-card">
-      <h2>Profile Details</h2>
-      <p><strong>Name:</strong> {{ user?.name }}</p>
-      <p><strong>Email:</strong> {{ user?.email }}</p>
-      <p><strong>Username:</strong> {{ user?.username }}</p>
-    </section>
+      <section class="profile-card">
+          <h2>Profile Details</h2>
+          <p><strong>Name:</strong> {{ user?.given_name }} {{ user?.family_name }}</p>
+          <p><strong>Email:</strong> {{ user?.email }}</p>
+          <p><strong>Username:</strong> {{ user?.name }}</p>
+
+          <p><strong>Roles:</strong></p>
+          @for (item of user?.roles; track item){
+          <p>{{ item }}</p>
+          }
+
+      </section>
   </main>
 </div>

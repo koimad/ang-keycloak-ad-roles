@@ -31,6 +31,5 @@ export const routes: Routes = [
     path: 'signout-callback-oidc',
     redirectTo: 'home'
   }
-
 ];
 

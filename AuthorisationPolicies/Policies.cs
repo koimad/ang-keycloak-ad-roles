@@ -40,8 +40,8 @@ public class Policies
     {
         return new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser()
-            .RequireResourceRolesForClient("aspire-client", new[] {$"model-{number}"})
-            //.RequireRole($"model-{number}")
+            //.RequireResourceRolesForClient("aspire-client", new[] {$"model-{number}"})
+            .RequireRole($"model-{number}")
             .Build();
     }
 

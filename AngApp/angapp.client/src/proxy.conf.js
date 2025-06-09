@@ -4,18 +4,26 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
     env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'https://localhost:7297';
 
 const PROXY_CONFIG = [
-  {
-    context: [
-          "/login",
-          "/signin-oidc",
-          "/logout",
-          "/userinfo",
-          "/externalapi/*",
-          "/signout-callback-oidc"
-    ],
-    target,
-    secure: false
-  }
+    {
+        context: [
+            "/login",
+            "/signin-oidc",
+            "/logout",
+            "/userinfo",
+            "/externalapi/*",
+            "/signout-callback-oidc",
+            "/bff/*",
+            "/.auth/login",
+            "/.auth/login/callback",
+            "/.auth/end-session",
+            "/.auth/me",
+        ],
+        target,
+        secure: false,
+        headers: {
+            Connection: 'Keep-Alive'
+        }
+    }
 ]
 
 module.exports = PROXY_CONFIG;
