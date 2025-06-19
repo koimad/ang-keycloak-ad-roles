@@ -6,24 +6,11 @@ namespace AuthorisationPolicies;
 
 public class Policies
 {
-    public const String IsFromUK = "IsFromUnitiedKingdom";
-
-
-    public static AuthorizationPolicy IsFromUnitiedKingdomPolicy()
-    {
-        return new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser()
-            .RequireRole("aspire-editor")
-            //.RequireClaim("country", "United Kingdom")
-            .Build();
-    }
-
-
     public static AuthorizationPolicy RequiresModelsRolePolicy()
     {
         return new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser()
-            .RequireRole("aspire-editor")
+            //.RequireRole("aspire-editor")
             .Build();
     }
 
@@ -31,7 +18,7 @@ public class Policies
     {
         return new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser()
-            .RequireRealmRoles($"model-{number}")
+            //.RequireRealmRoles($"model-{number}")
             //.RequireRole($"model-{number}")
             .Build();
     }
@@ -40,7 +27,7 @@ public class Policies
     {
         return new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser()
-            .RequireResourceRolesForClient("aspire-client", new[] {$"model-{number}"})
+            //.RequireResourceRolesForClient("aspire-client", new[] {$"model-{number}"})
             //.RequireRole($"model-{number}")
             .Build();
     }
