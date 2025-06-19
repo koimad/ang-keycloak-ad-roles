@@ -16,10 +16,12 @@
           <p><strong>Username:</strong> {{ user?.name }}</p>
 
           <p><strong>Roles:</strong></p>
-          @for (item of user?.roles; track item){
-          <p>{{ item }}</p>
-          }
+          <div>
+              @for (item of user?.roles; track item){
+              <p>{{ item }}</p>
+              }
+          </div>
 
-      </section>
+</section>
   </main>
 </div>

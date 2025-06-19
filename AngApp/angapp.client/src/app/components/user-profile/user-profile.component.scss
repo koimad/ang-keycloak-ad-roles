@@ -1,21 +1,30 @@
 .profile-card {
-  background: #f4f4f4;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: left;
+   
+    margin-left: 25%;
+    margin-right: 25%;
 }
 
-  .profile-card h2 {
+.profile-card h2 {
     font-size: 1.5em;
     margin-bottom: 15px;
     color: #34495e;
-  }
+}
 
-  .profile-card p {
+.profile-card p {
     font-size: 1.2em;
     margin: 10px 0;
-  }
+}
 
-  .profile-card p strong {
-      color: #2c3e50;
-  }
+.profile-card div {
+    margin-left: 60px;    
+}
+
+.profile-card p strong {
+    color: #2c3e50;
+}
+

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\AuthorisationPolicies\AuthorisationPolicies.csproj" />
-    <ProjectReference Include="..\..\OidcProxy.Net.OpenIdConnect\OidcProxy.Net.OpenIdConnect.csproj" />
+    <ProjectReference Include="..\..\Company.iFX.BFF.OIDC\Company.iFX.BFF.OIDC.csproj" />
     <ProjectReference Include="..\angapp.client\angapp.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>

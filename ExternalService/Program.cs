@@ -1,9 +1,9 @@
 using System.Security.Claims;
+
 using AuthorisationPolicies;
-using BlazorOpenIdConnect.Client.Models;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Keycloak.AuthServices.Authorization;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ExternalService;
 
@@ -11,16 +11,52 @@ public class Program
 {
     #region Methods
 
+    #region Private
+
+    private static Boolean OnValidateLifeTime(DateTime? notBefore, DateTime? expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+    {
+        return true;
+    }
+
+    #endregion
+
     #region Public
 
-    public static IEnumerable<Band> GetBands()
+    public static Func<HttpContext, String?> ForwardReferenceToken(String introspectionScheme = "introspection")
     {
-        return [
-            new Band(1, "Nirvana (from external API)"),
-            new Band(2, "Queens of the Stone Age (from external API)"),
-            new Band(3, "Fred Again. (from external API)"),
-            new Band(4, "Underworld (from external API)")
-        ];
+        String? Select(HttpContext context)
+        {
+            (String scheme, String credential) = GetSchemeAndCredential(context);
+
+            if (scheme.Equals("Bearer", StringComparison.OrdinalIgnoreCase) && !credential.Contains("."))
+            {
+                return introspectionScheme;
+            }
+
+            return null;
+        }
+
+        return Select;
+    }
+
+
+    public static (String, String) GetSchemeAndCredential(HttpContext context)
+    {
+        String? header = context.Request.Headers["Authorization"].FirstOrDefault();
+
+        if (String.IsNullOrEmpty(header))
+        {
+            return ("", "");
+        }
+
+        String[] parts = header.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length != 2)
+        {
+            return ("", "");
+        }
+
+        return (parts[0], parts[1]);
     }
 
 
@@ -29,31 +65,34 @@ public class Program
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddAuthorization()
-            .AddKeycloakAuthorization(options =>
-            {
-                //options.EnableRolesMapping = RolesClaimTransformationSource.Realm;
-                //options.RoleClaimType = KeycloakConstants.RoleClaimType;
-            })
             .AddAuthorizationBuilder();
-            
-        
-        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+
+        builder.Services.AddAuthentication(option => { option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
             .AddJwtBearer(options =>
             {
                 options.Authority = "http://localhost:8080/realms/Aspirations";
                 options.MetadataAddress = "http://localhost:8080/realms/Aspirations/.well-known/openid-configuration";
                 options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
                 options.TokenValidationParameters.NameClaimType = ClaimTypes.Name;
                 options.TokenValidationParameters.RoleClaimType = ClaimTypes.Role;
                 options.TokenValidationParameters.ValidateIssuer = true;
+                options.TokenValidationParameters.ValidIssuer = "http://localhost:8080/realms/Aspirations";
                 options.TokenValidationParameters.ValidateIssuerSigningKey = true;
+                options.TokenValidationParameters.ValidTypes = new[] { "JWT" };
+                
+                options.TokenValidationParameters.ValidAudiences = new[] { "aspire-client" };
                 options.TokenValidationParameters.ValidateAudience = true;
                 options.TokenValidationParameters.ValidateLifetime = true;
+                options.TokenValidationParameters.LifetimeValidator = OnValidateLifeTime;
+                options.TokenValidationParameters.ClockSkew = TimeSpan.Zero;
+
+                //options.ForwardDefaultSelector = ForwardReferenceToken("Introspection");
+
                 options.Audience = "aspire-client";
                 options.MapInboundClaims = true;
-                
-                options.Events = new JwtBearerEvents()
-                {
+
+                options.Events = new JwtBearerEvents {
                     OnForbidden = context =>
                     {
                         // add headers since the default middleware does not add them
@@ -65,13 +104,47 @@ public class Program
                         // add headers since the default middleware does not add them
                         context.Response.Headers.Append("Access-Control-Allow-Origin", $"{context.Request.Headers["Origin"]}");
                         return Task.CompletedTask;
+                    },
+                    OnTokenValidated = context =>
+                    {
+                        Console.WriteLine(context.SecurityToken.ValidTo);
+                        return Task.CompletedTask;
                     }
                 };
-            });
+            })
+            //.AddOAuth2Introspection("Introspection", options =>
+            //{
+            //    options.Authority = "http://localhost:8080/realms/Aspirations";
+            //    options.ClientId = "aspire-client";
+            //    options.ClientSecret = "5DljDk3brbgltSEB3xQwxWhyxIU9iQD2";
+            //    options.SkipTokensWithDots = false;
+            //    options.RoleClaimType = "roles"; // ClaimTypes.Role;
+            //    options.NameClaimType = "name"; // ClaimTypes.Name;
+            //    options.SaveToken = true;
+
+            //    options.Events = new OAuth2IntrospectionEvents {
+            //        OnSendingRequest = context =>
+            //        {
+            //            Console.WriteLine(context.TokenIntrospectionRequest.Token);
+            //            return Task.CompletedTask;
+            //        },
+            //        OnAuthenticationFailed = context =>
+            //        {
+            //            Console.WriteLine(context.Error);
+            //            return Task.CompletedTask;
+            //        },
+            //        OnTokenValidated = context =>
+            //        {
+            //            Console.WriteLine(context.SecurityToken);
+            //            return Task.CompletedTask;
+            //        }
+            //    };
+            //})
+            ;
 
         builder.Services.AddCors(options =>
         {
-            options.AddPolicy(name: "All",
+            options.AddPolicy("All",
                 policy =>
                 {
                     policy.WithOrigins("https://127.0.0.1:7297", "https://127.0.0.1:52947", "https://127.0.0.1:7052",
@@ -87,11 +160,8 @@ public class Program
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
-        
-        app.UseCors("All");
 
-        app.MapGet("externalapi/bands", (HttpContext httpContext) => Results.Ok(GetBands()))
-            .RequireAuthorization(Policies.RequiresModelsRolePolicy());
+        app.UseCors("All");
 
         app.MapGet("externalapi/model1", (HttpContext httpContext) => Results.Ok($"Hello {httpContext?.User?.Identity?.Name} from Model 1, the time is {DateTime.Now:F}"))
             .RequireAuthorization(Policies.RequiresResourceModelsPolicy("one"))

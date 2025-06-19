@@ -16,16 +16,13 @@ export class AuthService {
     }
 
     public login(): void {
-        //location.href = '/bff/login';
-        location.href = '/.auth/login';
-        //location.href = '/login';
+        location.href = '/auth/login';
         this.markLoggedIn();
         this.refreshSessionStatus();
     }
 
     public logout(): void {
-        //location.href = '/bff/logout';
-        location.href = '/.auth/end-session';
+        location.href = '/auth/logout';
         this.markLoggedOut();
     }
 
@@ -60,11 +57,8 @@ export class AuthService {
     }
 
     private refreshSessionStatus(): void {
-        if (!this.user) {
-            // Check if we have a valid session
-            //this.http.get<object>(`/bff/user`, { headers: new HttpHeaders(new Headers({ "X-CSRF": "1" })) })
-            //this.http.get<User>(`/userinfo`)            
-            this.http.get<User>(`/.auth/me`)    
+        if (!this.user) {            
+            this.http.get<User>(`/auth/profile`)    
                 .subscribe({
                     next: (user) => {
                         console.log(user);

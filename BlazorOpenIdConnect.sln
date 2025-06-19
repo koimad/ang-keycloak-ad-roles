@@ -11,9 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngApp.Server", "AngApp\Ang
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "angapp.client", "AngApp\angapp.client\angapp.client.esproj", "{71C6ADE7-C7DB-403B-884D-07E02093BA20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OidcProxy.Net", "OidcProxy.Net\OidcProxy.Net.csproj", "{6BCD47A1-03AA-F3C2-9917-A0252314C99D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Company.iFX.BFF", "Company.iFX.BFF\Company.iFX.BFF.csproj", "{6BCD47A1-03AA-F3C2-9917-A0252314C99D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OidcProxy.Net.OpenIdConnect", "OidcProxy.Net.OpenIdConnect\OidcProxy.Net.OpenIdConnect.csproj", "{F6602446-5C59-39C7-557E-BDEBE54D6A62}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Company.iFX.BFF.OIDC", "Company.iFX.BFF.OIDC\Company.iFX.BFF.OIDC.csproj", "{F6602446-5C59-39C7-557E-BDEBE54D6A62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Company.iFX.BFF.IdentityModel", "Company.iFX.BFF.IdentityModel\Company.iFX.BFF.IdentityModel.csproj", "{34CE7750-1CFE-418D-A899-04BF685FACC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{F6602446-5C59-39C7-557E-BDEBE54D6A62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6602446-5C59-39C7-557E-BDEBE54D6A62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6602446-5C59-39C7-557E-BDEBE54D6A62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34CE7750-1CFE-418D-A899-04BF685FACC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34CE7750-1CFE-418D-A899-04BF685FACC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34CE7750-1CFE-418D-A899-04BF685FACC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34CE7750-1CFE-418D-A899-04BF685FACC3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
+        <PackageId></PackageId>
+        <Version></Version>
+        <Authors></Authors>
+        <Company></Company>
+        <Description></Description>
+        <RepositoryUrl></RepositoryUrl>
+        <PackageTags></PackageTags>
+        <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+        <Title></Title>
+        <PackageProjectUrl></PackageProjectUrl>
+        <PackageReadmeFile></PackageReadmeFile>
+        <PackageIcon></PackageIcon>
+        <SignAssembly>False</SignAssembly>
+        <LangVersion>12</LangVersion>
+        <PackageReleaseNotes></PackageReleaseNotes>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Duende.IdentityModel.OidcClient" Version="6.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Company.iFX.BFF\Company.iFX.BFF.csproj" />
+    </ItemGroup>
+</Project>
