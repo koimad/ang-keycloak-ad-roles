@@ -1,18 +1,19 @@
+using System.Diagnostics;
 using System.Net;
 using System.Web;
 
 using Company.iFX.BFF.Cryptography;
+using Company.iFX.BFF.IdentityModel;
+using Company.iFX.BFF.IdentityModel.Client.Extensions;
+using Company.iFX.BFF.IdentityModel.Client.Messages;
 using Company.iFX.BFF.IdentityProviders;
 using Company.iFX.BFF.Logging;
+using Company.iFX.BFF.OIDC.Client;
 using Company.iFX.BFF.OpenIdConnect;
-
-using Duende.IdentityModel;
-using Duende.IdentityModel.Client;
-using Duende.IdentityModel.OidcClient;
 
 using Microsoft.Extensions.Caching.Memory;
 
-using JsonWebKeySetResponse = Duende.IdentityModel.Client.JsonWebKeySetResponse;
+
 using TokenResponse = Company.iFX.BFF.IdentityProviders.TokenResponse;
 
 namespace Company.iFX.BFF.OIDC;
@@ -108,6 +109,9 @@ public class OpenIdConnectIdentityProvider : IIdentityProvider
 
         AuthorizeState? request = await client.PrepareLoginAsync(GetFrontChannelParameters());
 
+        Debug.Assert(request.StartUrl != null);
+        Debug.Assert(request.CodeVerifier != null);
+
         return new AuthorizeRequest(new Uri(request.StartUrl), request.CodeVerifier);
     }
 
@@ -118,16 +122,14 @@ public class OpenIdConnectIdentityProvider : IIdentityProvider
 
         if (_cache.TryGetValue(DiscoveryEndpointAddress, out Object? discoveryDocument))
         {
-            return (DiscoveryDocument)discoveryDocument;
+            return (DiscoveryDocument)discoveryDocument!;
         }
 
         discoveryDocument = await ObtainDiscoveryDocument(endpointAddress);
 
         if (discoveryDocument == null)
         {
-            throw new ApplicationException(
-                "Unable to login. Unable to find a well-known/openid-configuration document " +
-                $"at {endpointAddress}");
+            throw new ApplicationException($"Unable to login. Unable to find a well-known/openid-configuration document at {endpointAddress}");
         }
 
         _cache.Set(endpointAddress, discoveryDocument, TimeSpan.FromHours(1));
@@ -137,7 +139,6 @@ public class OpenIdConnectIdentityProvider : IIdentityProvider
 
     public async Task<Uri> GetEndSessionEndpointAsync(String? idToken, String baseAddress)
     {
-        // Determine redirect URL
         String logOutRedirectEndpoint = _configuration.PostLogoutRedirectEndpoint.StartsWith('/')
             ? _configuration.PostLogoutRedirectEndpoint
             : $"/{_configuration.PostLogoutRedirectEndpoint}";
@@ -185,7 +186,7 @@ public class OpenIdConnectIdentityProvider : IIdentityProvider
                 "Unable to exchange code for access_token. The well-known/openid-configuration document does not contain a token endpoint.");
         }
 
-        Duende.IdentityModel.Client.TokenResponse response = await _httpClient.RequestTokenAsync(new AuthorizationCodeTokenRequest {
+        IdentityModel.Client.Messages.TokenResponse response = await _httpClient.RequestTokenAsync(new AuthorizationCodeTokenRequest {
             Address = wellKnown.token_endpoint,
             GrantType = OidcConstants.GrantTypes.AuthorizationCode,
             ClientId = _configuration.ClientId,
@@ -238,7 +239,7 @@ public class OpenIdConnectIdentityProvider : IIdentityProvider
         DiscoveryDocument openIdConfiguration = await GetDiscoveryDocument();
         Scopes scopes = new Scopes(_configuration.Scopes);
 
-        Duende.IdentityModel.Client.TokenResponse response = await _httpClient.RequestRefreshTokenAsync(new RefreshTokenRequest {
+        IdentityModel.Client.Messages.TokenResponse response = await _httpClient.RequestRefreshTokenAsync(new RefreshTokenRequest {
             Address = openIdConfiguration.token_endpoint,
             GrantType = OidcConstants.GrantTypes.RefreshToken,
             RefreshToken = refreshToken,

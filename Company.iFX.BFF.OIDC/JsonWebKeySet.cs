@@ -1,6 +1,5 @@
 using Company.iFX.BFF.Cryptography;
-
-using Duende.IdentityModel.Client;
+using Company.iFX.BFF.IdentityModel.Client.Messages;
 
 namespace Company.iFX.BFF.OIDC;
 
