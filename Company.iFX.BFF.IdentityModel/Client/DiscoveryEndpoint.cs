@@ -60,13 +60,8 @@ public class DiscoveryEndpoint
 
     public static Boolean IsValidScheme(Uri url)
     {
-        if (String.Equals(url.Scheme, _http, StringComparison.OrdinalIgnoreCase) ||
-            String.Equals(url.Scheme, _https, StringComparison.OrdinalIgnoreCase))
-        {
-            return true;
-        }
-
-        return false;
+        return String.Equals(url.Scheme, _http, StringComparison.OrdinalIgnoreCase) ||
+               String.Equals(url.Scheme, _https, StringComparison.OrdinalIgnoreCase);
     }
 
 

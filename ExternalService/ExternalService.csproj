@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AuthorisationPolicies\AuthorisationPolicies.csproj" />
+    <ProjectReference Include="..\Company.iFX.BFF.IdentityModel\Company.iFX.BFF.IdentityModel.csproj" />
   </ItemGroup>
 
 </Project>

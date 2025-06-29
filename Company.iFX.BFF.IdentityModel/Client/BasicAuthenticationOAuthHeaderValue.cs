@@ -23,12 +23,7 @@ public class BasicAuthenticationOAuthHeaderValue : AuthenticationHeaderValue
 
     private static String UrlEncode(String value)
     {
-        if (String.IsNullOrEmpty(value))
-        {
-            return String.Empty;
-        }
-
-        return Uri.EscapeDataString(value).Replace("%20", "+");
+        return String.IsNullOrEmpty(value) ? String.Empty : Uri.EscapeDataString(value).Replace("%20", "+");
     }
 
     #endregion
@@ -42,10 +37,7 @@ public class BasicAuthenticationOAuthHeaderValue : AuthenticationHeaderValue
             throw new ArgumentNullException(nameof(userName));
         }
 
-        if (password == null)
-        {
-            password = String.Empty;
-        }
+        password ??= String.Empty;
 
         Encoding encoding = Encoding.UTF8;
         String credential = $"{UrlEncode(userName)}:{UrlEncode(password)}";

@@ -66,12 +66,7 @@ internal class AuthSession : IAuthSession
     {
         String? date = Session.GetString(key);
 
-        if (date == null)
-        {
-            return null;
-        }
-
-        return DateTime.ParseExact(date, DateFormat, null);
+        return date == null ? null : DateTime.ParseExact(date, DateFormat, null);
     }
 
 

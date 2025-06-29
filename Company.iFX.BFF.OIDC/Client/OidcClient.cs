@@ -11,8 +11,7 @@ using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using System.Text;
 
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
+using Boolean = System.Boolean;
 using String = System.String;
 
 namespace Company.iFX.BFF.OIDC.Client;

@@ -34,12 +34,7 @@ public class JwtParser : ITokenParser
     {
         String[] chunks = token.Split(".");
 
-        if (chunks.Length != 3)
-        {
-            throw new NotSupportedException($"Invalid token: {token}");
-        }
-
-        return chunks[section];
+        return chunks.Length != 3 ? throw new NotSupportedException($"Invalid token: {token}") : chunks[section];
     }
 
 

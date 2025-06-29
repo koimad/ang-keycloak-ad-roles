@@ -16,24 +16,20 @@ internal static class Semaphores
 
     public static SemaphoreSlim GetInstance(String key)
     {
+        SemaphoreSlim? result = null;
+
         if (_collection.TryGetValue(key, out SemaphoreSlim? value))
         {
-            return value;
+            result = value;
         }
-
-        value = new SemaphoreSlim(1);
-
-        if (_collection.TryAdd(key, value))
+        else
         {
-            return value;
+            value = new SemaphoreSlim(1);
+
+            result = _collection.TryAdd(key, value) || _collection.TryGetValue(key, out value) ? value : throw new ApplicationException("Unable to create a lock.");
         }
 
-        if (_collection.TryGetValue(key, out value))
-        {
-            return value;
-        }
-
-        throw new ApplicationException("Unable to create a lock.");
+        return result;
     }
 
 

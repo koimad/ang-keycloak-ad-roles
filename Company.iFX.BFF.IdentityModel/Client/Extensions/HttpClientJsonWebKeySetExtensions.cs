@@ -7,13 +7,17 @@ namespace Company.iFX.BFF.IdentityModel.Client.Extensions;
 
 public static class HttpClientJsonWebKeySetExtensions
 {
-    public static async Task<JsonWebKeySetResponse> GetJsonWebKeySetAsync(this HttpMessageInvoker client, string? address = null, CancellationToken cancellationToken = default)
+    #region Methods
+
+    #region Public
+
+    public static async Task<JsonWebKeySetResponse> GetJsonWebKeySetAsync(this HttpMessageInvoker client, String? address = null, CancellationToken cancellationToken = default)
     {
-        return await client.GetJsonWebKeySetAsync(new JsonWebKeySetRequest
-        {
+        return await client.GetJsonWebKeySetAsync(new JsonWebKeySetRequest {
             Address = address
         }, cancellationToken).ConfigureAwait();
     }
+
 
     public static async Task<JsonWebKeySetResponse> GetJsonWebKeySetAsync(this HttpMessageInvoker client, JsonWebKeySetRequest request, CancellationToken cancellationToken = default)
     {
@@ -45,4 +49,8 @@ public static class HttpClientJsonWebKeySetExtensions
 
         return await ProtocolResponse.FromHttpResponseAsync<JsonWebKeySetResponse>(response).ConfigureAwait();
     }
+
+    #endregion
+
+    #endregion
 }

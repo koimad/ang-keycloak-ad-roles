@@ -64,12 +64,7 @@ public class ClaimComparer : EqualityComparer<Claim>
                         String.Equals(x.Value, y.Value, valueComparison) &&
                         String.Equals(x.ValueType, y.ValueType, StringComparison.Ordinal);
 
-        if (_options.IgnoreIssuer)
-        {
-            return equal;
-        }
-
-        return equal && String.Equals(x.Issuer, y.Issuer, valueComparison);
+        return _options.IgnoreIssuer ? equal : equal && String.Equals(x.Issuer, y.Issuer, valueComparison);
     }
 
 
@@ -95,12 +90,7 @@ public class ClaimComparer : EqualityComparer<Claim>
             issuerHash = claim.Issuer?.GetHashCode() ?? 0;
         }
 
-        if (_options.IgnoreIssuer)
-        {
-            return typeHash ^ valueHash;
-        }
-
-        return typeHash ^ valueHash ^ issuerHash;
+        return _options.IgnoreIssuer ? typeHash ^ valueHash : typeHash ^ valueHash ^ issuerHash;
     }
 
     #endregion

@@ -1,9 +1,12 @@
-using System.Security.Claims;
-
 using AuthorisationPolicies;
+
+using Company.iFX.BFF.IdentityModel.Client.Messages;
+using Company.iFX.BFF.IdentityModel.Middleware;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+
+using System.Security.Claims;
 
 namespace ExternalService;
 
@@ -67,6 +70,11 @@ public class Program
         builder.Services.AddAuthorization()
             .AddAuthorizationBuilder();
 
+        builder.Services.AddHttpClient();
+
+        builder.Services.Configure<TokenIntrospectionOptions>(builder.Configuration.GetSection("TokenIntrospection"))
+            .AddTransient<TokenIntrospectionMiddleware>();
+
         builder.Services.AddAuthentication(option => { option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
             .AddJwtBearer(options =>
             {
@@ -80,14 +88,12 @@ public class Program
                 options.TokenValidationParameters.ValidIssuer = "http://localhost:8080/realms/Aspirations";
                 options.TokenValidationParameters.ValidateIssuerSigningKey = true;
                 options.TokenValidationParameters.ValidTypes = new[] { "JWT" };
-                
+
                 options.TokenValidationParameters.ValidAudiences = new[] { "aspire-client" };
                 options.TokenValidationParameters.ValidateAudience = true;
                 options.TokenValidationParameters.ValidateLifetime = true;
                 options.TokenValidationParameters.LifetimeValidator = OnValidateLifeTime;
                 options.TokenValidationParameters.ClockSkew = TimeSpan.Zero;
-
-                //options.ForwardDefaultSelector = ForwardReferenceToken("Introspection");
 
                 options.Audience = "aspire-client";
                 options.MapInboundClaims = true;
@@ -108,38 +114,11 @@ public class Program
                     OnTokenValidated = context =>
                     {
                         Console.WriteLine(context.SecurityToken.ValidTo);
+
                         return Task.CompletedTask;
                     }
                 };
             })
-            //.AddOAuth2Introspection("Introspection", options =>
-            //{
-            //    options.Authority = "http://localhost:8080/realms/Aspirations";
-            //    options.ClientId = "aspire-client";
-            //    options.ClientSecret = "5DljDk3brbgltSEB3xQwxWhyxIU9iQD2";
-            //    options.SkipTokensWithDots = false;
-            //    options.RoleClaimType = "roles"; // ClaimTypes.Role;
-            //    options.NameClaimType = "name"; // ClaimTypes.Name;
-            //    options.SaveToken = true;
-
-            //    options.Events = new OAuth2IntrospectionEvents {
-            //        OnSendingRequest = context =>
-            //        {
-            //            Console.WriteLine(context.TokenIntrospectionRequest.Token);
-            //            return Task.CompletedTask;
-            //        },
-            //        OnAuthenticationFailed = context =>
-            //        {
-            //            Console.WriteLine(context.Error);
-            //            return Task.CompletedTask;
-            //        },
-            //        OnTokenValidated = context =>
-            //        {
-            //            Console.WriteLine(context.SecurityToken);
-            //            return Task.CompletedTask;
-            //        }
-            //    };
-            //})
             ;
 
         builder.Services.AddCors(options =>
@@ -158,6 +137,10 @@ public class Program
         WebApplication app = builder.Build();
 
         app.UseHttpsRedirection();
+
+        app.UseAuthentication();
+
+        app.UseMiddleware<TokenIntrospectionMiddleware>();
 
         app.UseAuthorization();
 

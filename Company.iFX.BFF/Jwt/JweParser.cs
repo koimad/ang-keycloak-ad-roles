@@ -13,12 +13,7 @@ public sealed class JweParser(IEncryptionKey encryptionKey) : JwtParser
 
     internal static Boolean IsJwe(String token)
     {
-        if (String.IsNullOrEmpty(token))
-        {
-            return false;
-        }
-
-        return token.Split('.', StringSplitOptions.RemoveEmptyEntries).Length == 5;
+        return !String.IsNullOrEmpty(token) && token.Split('.', StringSplitOptions.RemoveEmptyEntries).Length == 5;
     }
 
     #endregion
