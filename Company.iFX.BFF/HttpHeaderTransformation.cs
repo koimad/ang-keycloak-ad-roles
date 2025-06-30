@@ -5,7 +5,7 @@ using Yarp.ReverseProxy.Transforms.Builder;
 
 namespace Company.iFX.BFF;
 
-internal class HttpHeaderTransformation : ITransformProvider
+public class HttpHeaderTransformation : ITransformProvider
 {
     #region Methods
 

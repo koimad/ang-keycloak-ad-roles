@@ -2,9 +2,51 @@ using System.Text.RegularExpressions;
 
 namespace Company.iFX.BFF;
 
-internal partial record LandingPage
+public partial record LandingPage
 {
+    #region Members
+
     private readonly String _value;
+
+    #endregion
+
+    #region Constructors
+
+    public LandingPage()
+    {
+        _value = "/";
+    }
+
+
+    private LandingPage(String landingPage)
+    {
+        _value = landingPage;
+    }
+
+    #endregion
+
+    #region Methods
+
+    #region Private
+
+    [GeneratedRegex("^\\/[a-zA-Z0-9.]")]
+    private static partial Regex LandingPageRegex();
+
+    #endregion
+
+    #region Public
+
+    public Boolean Equals(String url)
+    {
+        return ToString().Equals(url, StringComparison.InvariantCultureIgnoreCase);
+    }
+
+
+    public override String ToString()
+    {
+        return String.IsNullOrEmpty(_value) ? "/" : _value;
+    }
+
 
     public static Boolean TryParse(String url, out LandingPage landingPage)
     {
@@ -41,31 +83,7 @@ internal partial record LandingPage
         return true;
     }
 
+    #endregion
 
-    public LandingPage()
-    {
-        _value = "/";
-    }
-
-
-    private LandingPage(String landingPage)
-    {
-        _value = landingPage;
-    }
-
-
-    public override String ToString()
-    {
-        return String.IsNullOrEmpty(_value) ? "/" : _value;
-    }
-
-
-    public Boolean Equals(String url)
-    {
-        return ToString().Equals(url, StringComparison.InvariantCultureIgnoreCase);
-    }
-
-
-    [GeneratedRegex("^\\/[a-zA-Z0-9.]")]
-    private static partial Regex LandingPageRegex();
+    #endregion
 }

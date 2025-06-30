@@ -1,9 +1,12 @@
 using System.Text;
 
+using Company.iFX.BFF.IdentityModel;
+using Company.iFX.BFF.IdentityModel.Client;
 using Company.iFX.BFF.IdentityModel.Client.Messages;
 using Company.iFX.BFF.IdentityModel.Internal;
 
-namespace Company.iFX.BFF.IdentityModel.Client.Extensions;
+// ReSharper disable once CheckNamespace
+namespace System.Net.Http;
 
 public static class HttpClientPushedAuthorizationExtensions
 {
@@ -15,7 +18,7 @@ public static class HttpClientPushedAuthorizationExtensions
     {
         if (request.Parameters.ContainsKey(OidcConstants.AuthorizeRequest.RequestUri))
         {
-            throw new ArgumentException("request_uri cannot be used in a pushed authorization request", "request_uri");
+            throw new ArgumentException("request_uri cannot be used in a pushed authorization request", nameof(request));
         }
 
         ProtocolRequest clone = request.Clone();

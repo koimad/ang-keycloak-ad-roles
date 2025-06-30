@@ -1,8 +1,7 @@
-using System.IdentityModel.Tokens.Jwt;
-
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
-using ILogger = Company.iFX.BFF.Logging.ILogger;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Company.iFX.BFF;
 
@@ -16,7 +15,7 @@ public class DefaultAuthenticationCallbackHandler : IAuthenticationCallbackHandl
 
     #region Constructors
 
-    public DefaultAuthenticationCallbackHandler(ILogger logger)
+    public DefaultAuthenticationCallbackHandler(ILogger<DefaultAuthenticationCallbackHandler> logger)
     {
         _logger = logger;
     }
@@ -27,12 +26,11 @@ public class DefaultAuthenticationCallbackHandler : IAuthenticationCallbackHandl
 
     #region Public
 
-    public virtual async Task<IResult> OnAuthenticated(HttpContext context, JwtPayload? jwtPayload, String defaultLandingPage, String? userPreferredLandingPage)
+    public virtual Task<IResult> OnAuthenticated(HttpContext context, JwtPayload? jwtPayload, String defaultLandingPage, String? userPreferredLandingPage)
     {
         String landingPage = userPreferredLandingPage ?? defaultLandingPage;
-
-        await _logger.InformAsync($"Redirect({landingPage})");
-        return Results.Redirect(landingPage);
+        _logger.LogInformation($"Redirect({landingPage})");
+        return Task.FromResult(Results.Redirect(landingPage));
     }
 
 

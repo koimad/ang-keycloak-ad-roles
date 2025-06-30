@@ -16,15 +16,6 @@ public static class ModuleInitializer
 
     #region Methods
 
-    #region Internal
-
-    internal static void Reset() // Do not remove: Used for integration testing...
-    {
-        _options = new ProxyOptions();
-    }
-
-    #endregion
-
     #region Public
 
     public static IServiceCollection AddOidcProxy<TIdentityProvider>(this IServiceCollection serviceCollection, Action<ProxyOptions>? configureOptions = null)
@@ -53,6 +44,12 @@ public static class ModuleInitializer
         }
 
         return serviceCollection;
+    }
+
+
+    public static void Reset() // Do not remove: Used for integration testing...
+    {
+        _options = new ProxyOptions();
     }
 
 

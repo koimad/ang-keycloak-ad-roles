@@ -4,7 +4,7 @@ using Company.iFX.BFF.Locking;
 
 namespace Company.iFX.BFF.OpenIdConnect;
 
-internal class TokenFactory
+public class TokenFactory
 {
     #region Members
 

@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 using Company.iFX.BFF.ModuleInitializers;
 
 using Yarp.ReverseProxy.Configuration;
@@ -15,10 +17,9 @@ public class ProxyConfig : IAppSettingsSection
     public String? LandingPage { get; set; }
     public String? NameClaim { get; set; }
     public String? RoleClaim { get; set; }
+
     public IEnumerable<String> AllowedLandingPages { get; set; } = Array.Empty<String>();
-    public Boolean EnableUserPreferredLandingPages { get; set; } = false;
     public Boolean? AlwaysRedirectToHttps { get; set; }
-    public Boolean? AllowAnonymousAccess { get; set; }
     public Uri? CustomHostName { get; set; }
     public String? CookieName { get; set; }
     public TimeSpan? SessionIdleTimeout { get; set; }
@@ -52,9 +53,7 @@ public class ProxyConfig : IAppSettingsSection
         AssignIfNotNull(RoleClaim, roleClaim => options.RoleClaim = roleClaim);
 
         options.Mode = Mode;
-        options.EnableUserPreferredLandingPages = EnableUserPreferredLandingPages;
         options.AlwaysRedirectToHttps = !AlwaysRedirectToHttps.HasValue || AlwaysRedirectToHttps.Value;
-        options.AllowAnonymousAccess = !AllowAnonymousAccess.HasValue || AllowAnonymousAccess.Value;
         options.EndpointName = EndpointName ?? "auth";
         options.SetAllowedLandingPages(AllowedLandingPages);
 
@@ -65,8 +64,10 @@ public class ProxyConfig : IAppSettingsSection
 
         if (options.Mode != Mode.AuthenticateOnly)
         {
-            IReadOnlyList<RouteConfig>? routes = ReverseProxy?.Routes.ToRouteConfig();
-            IReadOnlyList<ClusterConfig>? clusters = ReverseProxy?.Clusters.ToClusterConfig();
+            Debug.Assert(ReverseProxy != null);
+
+            IReadOnlyList<RouteConfig> routes = ReverseProxy.Routes.ToRouteConfig();
+            IReadOnlyList<ClusterConfig> clusters = ReverseProxy.Clusters.ToClusterConfig();
 
             options.ConfigureYarp(routes, clusters);
         }

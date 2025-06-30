@@ -6,7 +6,7 @@ using Jose;
 
 namespace Company.iFX.BFF.Jwt.SignatureValidation;
 
-internal class Hs256SignatureValidator(SymmetricKey symmetricKey) : SignatureValidator
+public class Hs256SignatureValidator(SymmetricKey symmetricKey) : SignatureValidator
 {
     #region Methods
 

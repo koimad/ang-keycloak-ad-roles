@@ -1,6 +1,6 @@
 namespace Company.iFX.BFF;
 
-internal class EndpointName
+public class EndpointName
 {
     #region Members
 

@@ -1,11 +1,11 @@
 using Company.iFX.BFF.IdentityProviders;
-using Company.iFX.BFF.Logging;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Company.iFX.BFF.Middleware;
 
-internal class AnonymousAccessMiddleware : IMiddleware
+public class AnonymousAccessMiddleware : IMiddleware
 {
     #region Members
 
@@ -18,7 +18,7 @@ internal class AnonymousAccessMiddleware : IMiddleware
 
     #region Constructors
 
-    public AnonymousAccessMiddleware(EndpointName oidcProxyReservedEndpointName, IAuthSession authSession, ILogger logger, IHttpContextAccessor httpContextAccessor)
+    public AnonymousAccessMiddleware(EndpointName oidcProxyReservedEndpointName, IAuthSession authSession, ILogger<AnonymousAccessMiddleware> logger, IHttpContextAccessor httpContextAccessor)
     {
         _oidcProxyReservedEndpointName = oidcProxyReservedEndpointName;
         _authSession = authSession;
@@ -52,7 +52,7 @@ internal class AnonymousAccessMiddleware : IMiddleware
 
         AuthorizeRequest authorizeRequest = await _authSession.InitiateAuthenticationSequence(currentPath);
 
-        await _logger.InformAsync($"Redirect({authorizeRequest.AuthorizeUri})");
+        _logger.LogInformation($"Redirect({authorizeRequest.AuthorizeUri})");
 
         context.Response.Redirect(authorizeRequest.AuthorizeUri.ToString());
     }

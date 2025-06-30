@@ -12,7 +12,7 @@ using Microsoft.Extensions.Options;
 
 namespace Company.iFX.BFF.Middleware;
 
-internal sealed class OidcProxyAuthenticationHandler : AuthenticationHandler<OidcProxyAuthenticationSchemeOptions>
+public sealed class OidcProxyAuthenticationHandler : AuthenticationHandler<OidcProxyAuthenticationSchemeOptions>
 {
     #region Members
 

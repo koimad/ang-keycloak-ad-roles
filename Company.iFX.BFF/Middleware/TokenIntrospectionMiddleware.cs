@@ -1,24 +1,24 @@
 ﻿using Company.iFX.BFF.IdentityProviders;
-using Company.iFX.BFF.Logging;
 using Company.iFX.BFF.OpenIdConnect;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Company.iFX.BFF.Middleware;
 
-internal class TokenIntrospectionMiddleware : IYarpMiddleware
+public class TokenIntrospectionMiddleware : IYarpMiddleware
 {
     #region Members
 
     private readonly IAuthSession _authSession;
     private readonly IIdentityProvider _identityProvider;
-    private readonly ILogger _logger;
+    private readonly ILogger<TokenIntrospectionMiddleware> _logger;
 
     #endregion
 
     #region Constructors
 
-    public TokenIntrospectionMiddleware(ILogger logger, IIdentityProvider identityProvider, IAuthSession authSession)
+    public TokenIntrospectionMiddleware(ILogger<TokenIntrospectionMiddleware> logger, IIdentityProvider identityProvider, IAuthSession authSession)
     {
         _logger = logger;
         _identityProvider = identityProvider;
@@ -53,7 +53,7 @@ internal class TokenIntrospectionMiddleware : IYarpMiddleware
         }
         catch (TokenRenewalFailedException e)
         {
-            await _logger.ErrorAsync(e);
+            _logger.LogError(e, "Error invoking Token Introspection Endpoint ");
 
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             await context.Response.WriteAsync(@"{ ""reason"": ""token_validation_failed"" }");

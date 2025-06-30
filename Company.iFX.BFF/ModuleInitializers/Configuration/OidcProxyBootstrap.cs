@@ -1,7 +1,6 @@
 using Company.iFX.BFF.Endpoints;
 using Company.iFX.BFF.IdentityProviders;
 using Company.iFX.BFF.Jwt.SignatureValidation;
-using Company.iFX.BFF.Logging;
 using Company.iFX.BFF.Middleware;
 using Company.iFX.BFF.OpenIdConnect;
 
@@ -10,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Company.iFX.BFF.ModuleInitializers.Configuration;
 
-internal class OidcProxyBootstrap<TIdentityProvider, TIdentityProviderConfig> : IOidcProxyBootstrap
+public class OidcProxyBootstrap<TIdentityProvider, TIdentityProviderConfig> : IOidcProxyBootstrap
     where TIdentityProvider : class, IIdentityProvider
     where TIdentityProviderConfig : class
 {
@@ -57,7 +56,7 @@ internal class OidcProxyBootstrap<TIdentityProvider, TIdentityProviderConfig> : 
             .AddTransient<TokenFactory>()
             .AddTransient<AuthSession>()
             .AddTransient<IAuthSession, AuthSession>()
-            .AddTransient<ILogger, DefaultLogger>();
+            ;
 
         services
             .AddTransient<Rs256SignatureValidator>();
@@ -71,33 +70,26 @@ internal class OidcProxyBootstrap<TIdentityProvider, TIdentityProviderConfig> : 
 
     public void Configure(ProxyOptions options, WebApplication app)
     {
-        if (!options.AllowAnonymousAccess)
-        {
-            app.UseMiddleware<AnonymousAccessMiddleware>();
-        }
-
+        app.UseMiddleware<AnonymousAccessMiddleware>();
         app.MapAuthenticationEndpoints(options.EndpointName);
     }
 
 
-    public IOidcProxyBootstrap WithCallbackHandler<TCallbackHandler>()
-        where TCallbackHandler : IAuthenticationCallbackHandler
+    public IOidcProxyBootstrap WithCallbackHandler<TCallbackHandler>() where TCallbackHandler : IAuthenticationCallbackHandler
     {
         _callbackHandlerType = typeof(TCallbackHandler);
         return this;
     }
 
 
-    public IOidcProxyBootstrap WithClaimsTransformation<TClaimsTransformation>()
-        where TClaimsTransformation : IClaimsTransformation
+    public IOidcProxyBootstrap WithClaimsTransformation<TClaimsTransformation>() where TClaimsTransformation : IClaimsTransformation
     {
         _claimsTransformationType = typeof(TClaimsTransformation);
         return this;
     }
 
 
-    public IOidcProxyBootstrap WithRedirectUriFactory<TRedirectUriFactory>()
-        where TRedirectUriFactory : IRedirectUriFactory
+    public IOidcProxyBootstrap WithRedirectUriFactory<TRedirectUriFactory>() where TRedirectUriFactory : IRedirectUriFactory
     {
         _redirectUrlFactory = typeof(TRedirectUriFactory);
         return this;

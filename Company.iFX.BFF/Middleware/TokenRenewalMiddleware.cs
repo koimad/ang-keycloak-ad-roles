@@ -1,22 +1,22 @@
-using Company.iFX.BFF.Logging;
 using Company.iFX.BFF.OpenIdConnect;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Company.iFX.BFF.Middleware;
 
-internal class TokenRenewalMiddleware : IYarpMiddleware
+public class TokenRenewalMiddleware : IYarpMiddleware
 {
     #region Members
 
-    private readonly ILogger _logger;
+    private readonly ILogger<TokenRenewalMiddleware> _logger;
     private readonly TokenFactory _tokenFactory;
 
     #endregion
 
     #region Constructors
 
-    public TokenRenewalMiddleware(TokenFactory tokenFactory, ILogger logger)
+    public TokenRenewalMiddleware(TokenFactory tokenFactory, ILogger<TokenRenewalMiddleware> logger)
     {
         _tokenFactory = tokenFactory;
         _logger = logger;
@@ -36,7 +36,7 @@ internal class TokenRenewalMiddleware : IYarpMiddleware
         }
         catch (TokenRenewalFailedException e)
         {
-            await _logger.ErrorAsync(e);
+            _logger.LogError(e,"Error Invoking Token Renewal Endpoint" );
 
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             await context.Response.WriteAsync(@"{ ""reason"": ""token_renewal_failed"" }");

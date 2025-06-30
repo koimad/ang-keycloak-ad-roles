@@ -52,6 +52,11 @@ public class Program
 
         builder.Services.AddAntiforgery();
 
+        builder.Services.AddLogging(loggingBuilder =>
+        {
+            loggingBuilder.AddConsole();
+        });
+
         OidcProxyConfig? config = builder.Configuration
             .GetSection("OidcProxy")
             .Get<OidcProxyConfig>();

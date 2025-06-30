@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Company.iFX.BFF.ModuleInitializers.Configuration;
 
-internal class AuthorizationBootstrap : IBootstrap
+public class AuthorizationBootstrap : IBootstrap
 {
     #region Members
 

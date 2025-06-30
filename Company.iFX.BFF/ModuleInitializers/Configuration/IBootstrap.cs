@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Company.iFX.BFF.ModuleInitializers.Configuration;
 
-internal interface IBootstrap
+public interface IBootstrap
 {
     void Configure(ProxyOptions options, IServiceCollection services);
 

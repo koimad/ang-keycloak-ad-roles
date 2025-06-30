@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Company.iFX.BFF.Endpoints;
 
-internal static class PathStringExtensions
+public static class PathStringExtensions
 {
     #region Methods
 

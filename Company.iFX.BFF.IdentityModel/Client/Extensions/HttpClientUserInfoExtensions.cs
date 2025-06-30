@@ -3,10 +3,17 @@
 using Company.iFX.BFF.IdentityModel.Client.Messages;
 using Company.iFX.BFF.IdentityModel.Internal;
 
-namespace Company.iFX.BFF.IdentityModel.Client.Extensions;
+// ReSharper disable once CheckNamespace
+namespace System.Net.Http;
 
 public static class HttpClientUserInfoExtensions
 {
+    #region Members
+
+    private const String _applicationJson = "application/json";
+
+    #endregion
+
     #region Methods
 
     #region Public
@@ -39,7 +46,7 @@ public static class HttpClientUserInfoExtensions
             return ProtocolResponse.FromException<UserInfoResponse>(ex);
         }
 
-        Boolean skipJsonParsing = response.Content?.Headers.ContentType?.MediaType != "application/json";
+        Boolean skipJsonParsing = response.Content?.Headers.ContentType?.MediaType != _applicationJson;
         return await ProtocolResponse.FromHttpResponseAsync<UserInfoResponse>(response, skipJson: skipJsonParsing).ConfigureAwait();
     }
 

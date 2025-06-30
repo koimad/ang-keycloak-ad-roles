@@ -1,7 +1,8 @@
 ﻿using System.Security.Claims;
 using System.Text.Json;
 
-namespace Company.iFX.BFF.IdentityModel.Client.Extensions;
+// ReSharper disable once CheckNamespace
+namespace System.Text.Json;
 
 public static class JsonElementExtensions
 {

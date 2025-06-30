@@ -1,7 +1,9 @@
-﻿using Company.iFX.BFF.IdentityModel.Client.Messages;
+﻿using Company.iFX.BFF.IdentityModel;
+using Company.iFX.BFF.IdentityModel.Client.Messages;
 using Company.iFX.BFF.IdentityModel.Internal;
 
-namespace Company.iFX.BFF.IdentityModel.Client.Extensions;
+// ReSharper disable once CheckNamespace
+namespace System.Net.Http;
 
 public static class HttpClientBackchannelAuthenticationExtensions
 {

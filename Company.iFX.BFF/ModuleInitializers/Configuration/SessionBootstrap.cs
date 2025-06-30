@@ -14,7 +14,7 @@ using StackExchange.Redis;
 
 namespace Company.iFX.BFF.ModuleInitializers.Configuration;
 
-internal class SessionBootstrap : IBootstrap
+public class SessionBootstrap : IBootstrap
 {
     #region Members
 

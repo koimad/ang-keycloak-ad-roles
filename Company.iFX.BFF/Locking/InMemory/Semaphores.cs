@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 
 namespace Company.iFX.BFF.Locking.InMemory;
 
-internal static class Semaphores
+public static class Semaphores
 {
     #region Members
 

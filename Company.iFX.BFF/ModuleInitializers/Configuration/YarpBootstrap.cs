@@ -5,7 +5,7 @@ using Company.iFX.BFF.Middleware;
 
 namespace Company.iFX.BFF.ModuleInitializers.Configuration;
 
-internal class YarpBootstrap : IBootstrap
+public class YarpBootstrap : IBootstrap
 {
     #region Members
 

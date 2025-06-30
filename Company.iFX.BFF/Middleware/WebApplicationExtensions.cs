@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Company.iFX.BFF.Middleware;
 
-internal static class WebApplicationExtensions
+public static class WebApplicationExtensions
 {
     #region Methods
 

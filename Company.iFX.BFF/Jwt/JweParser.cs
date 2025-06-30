@@ -9,16 +9,13 @@ public sealed class JweParser(IEncryptionKey encryptionKey) : JwtParser
 {
     #region Methods
 
-    #region Internal
+    #region Public
 
-    internal static Boolean IsJwe(String token)
+    public static Boolean IsJwe(String token)
     {
         return !String.IsNullOrEmpty(token) && token.Split('.', StringSplitOptions.RemoveEmptyEntries).Length == 5;
     }
 
-    #endregion
-
-    #region Public
 
     public override JwtPayload? ParseJwtPayload(String? encryptedAccessToken)
     {

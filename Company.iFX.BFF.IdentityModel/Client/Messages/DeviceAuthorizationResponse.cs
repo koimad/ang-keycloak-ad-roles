@@ -1,4 +1,4 @@
-﻿using Company.iFX.BFF.IdentityModel.Client.Extensions;
+﻿using System.Text.Json;
 
 namespace Company.iFX.BFF.IdentityModel.Client.Messages;
 

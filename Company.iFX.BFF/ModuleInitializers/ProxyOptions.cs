@@ -26,7 +26,7 @@ public class ProxyOptions
 
     private Action<YarpBootstrap> _configureYarpBootstrap = _ => { };
 
-    private readonly List<Type> _customYarpMiddleware =  [typeof(TokenRenewalMiddleware), typeof(TokenIntrospectionMiddleware)];
+    private readonly List<Type> _customYarpMiddleware = [typeof(TokenRenewalMiddleware), typeof(TokenIntrospectionMiddleware)];
 
     private IOidcProxyBootstrap? _oidcProxyBootstrap;
 
@@ -34,17 +34,17 @@ public class ProxyOptions
 
     private readonly YarpBootstrap _yarpBootstrap = new();
 
-    internal LandingPage[] AllowedUserPreferredLandingPages = Array.Empty<LandingPage>();
-
-    internal Uri? CustomHostName;
-
-    internal LandingPage ErrorPage = new LandingPage();
-
-    internal LandingPage LandingPage = new LandingPage();
-
     #endregion
 
     #region Properties
+
+    public LandingPage[] AllowedUserPreferredLandingPages { get; set; } = Array.Empty<LandingPage>();
+
+    public Uri? CustomHostName { get; set; }
+
+    public LandingPage ErrorPage { get; set; } = new LandingPage();
+
+    public LandingPage LandingPage { get; set; } = new LandingPage();
 
     public String EndpointName { get; set; } = "auth";
 
@@ -61,64 +61,13 @@ public class ProxyOptions
     public Boolean AlwaysRedirectToHttps { get; set; } = true;
 
     public Boolean EnableUserPreferredLandingPages { get; set; } = false;
-
     public String NameClaim { get; set; } = "sub";
 
     public String RoleClaim { get; set; } = "role";
 
-    public Boolean AllowAnonymousAccess { get; set; } = true;
-
     #endregion
 
     #region Methods
-
-    #region Internal
-
-    internal IEnumerable<IBootstrap> GetConfiguration()
-    {
-        if (_oidcProxyBootstrap == null)
-        {
-            throw new NotSupportedException("Unable to bootstrap Company.iFX.BFF. No IdentityProviders configured.");
-        }
-
-        _configureCallbackHandler.Invoke(_oidcProxyBootstrap);
-        _configureClaimsTransformation.Invoke(_oidcProxyBootstrap);
-
-        _configureYarpBootstrap.Invoke(_yarpBootstrap);
-
-        _yarpBootstrap.AddYarpMiddleware(_customYarpMiddleware);
-
-        List<IBootstrap?> bootstraps = new List<IBootstrap?>();
-
-        if (Mode != Mode.AuthenticateOnly)
-        {
-            bootstraps.Add(_yarpBootstrap);
-        }
-
-        bootstraps.Add(_sessionBootstrap);
-        bootstraps.Add(_oidcProxyBootstrap);
-        bootstraps.Add(_authorizationBootstrap);
-
-        return bootstraps
-            .Where(x => x != null)
-            .Cast<IBootstrap>()
-            .ToArray();
-    }
-
-
-    internal void RegisterIdentityProvider<TIdentityProvider, TIdentityProviderConfig>(TIdentityProviderConfig config)
-        where TIdentityProvider : class, IIdentityProvider
-        where TIdentityProviderConfig : class
-    {
-        if (_oidcProxyBootstrap != null)
-        {
-            throw new NotSupportedException("Unable to bootstrap Company.iFX.BFF. Configuring multiple IdentityProviders is not supported.");
-        }
-
-        _oidcProxyBootstrap = new OidcProxyBootstrap<TIdentityProvider, TIdentityProviderConfig>(config);
-    }
-
-    #endregion
 
     #region Public
 
@@ -178,6 +127,51 @@ public class ProxyOptions
 
         _configureYarpBootstrap = yarpBootstrap => yarpBootstrap
             .ConfigureProxyBuilder(b => b.LoadFromMemory(routes, clusters));
+    }
+
+
+    public IEnumerable<IBootstrap> GetConfiguration()
+    {
+        if (_oidcProxyBootstrap == null)
+        {
+            throw new NotSupportedException("Unable to bootstrap Company.iFX.BFF. No IdentityProviders configured.");
+        }
+
+        _configureCallbackHandler.Invoke(_oidcProxyBootstrap);
+        _configureClaimsTransformation.Invoke(_oidcProxyBootstrap);
+
+        _configureYarpBootstrap.Invoke(_yarpBootstrap);
+
+        _yarpBootstrap.AddYarpMiddleware(_customYarpMiddleware);
+
+        List<IBootstrap?> bootstraps = new List<IBootstrap?>();
+
+        if (Mode != Mode.AuthenticateOnly)
+        {
+            bootstraps.Add(_yarpBootstrap);
+        }
+
+        bootstraps.Add(_sessionBootstrap);
+        bootstraps.Add(_oidcProxyBootstrap);
+        bootstraps.Add(_authorizationBootstrap);
+
+        return bootstraps
+            .Where(x => x != null)
+            .Cast<IBootstrap>()
+            .ToArray();
+    }
+
+
+    public void RegisterIdentityProvider<TIdentityProvider, TIdentityProviderConfig>(TIdentityProviderConfig config)
+        where TIdentityProvider : class, IIdentityProvider
+        where TIdentityProviderConfig : class
+    {
+        if (_oidcProxyBootstrap != null)
+        {
+            throw new NotSupportedException("Unable to bootstrap Company.iFX.BFF. Configuring multiple IdentityProviders is not supported.");
+        }
+
+        _oidcProxyBootstrap = new OidcProxyBootstrap<TIdentityProvider, TIdentityProviderConfig>(config);
     }
 
 

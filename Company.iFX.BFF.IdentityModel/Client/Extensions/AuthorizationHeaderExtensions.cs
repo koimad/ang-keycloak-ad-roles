@@ -1,8 +1,10 @@
 ﻿using System.Net.Http.Headers;
 
-using static Company.iFX.BFF.IdentityModel.OidcConstants;
+using Company.iFX.BFF.IdentityModel;
+using Company.iFX.BFF.IdentityModel.Client;
 
-namespace Company.iFX.BFF.IdentityModel.Client.Extensions;
+// ReSharper disable once CheckNamespace
+namespace System.Net.Http;
 
 public static class AuthorizationHeaderExtensions
 {
@@ -36,19 +38,19 @@ public static class AuthorizationHeaderExtensions
 
     public static void SetBearerToken(this HttpClient client, String token)
     {
-        client.SetToken(AuthenticationSchemes.AuthorizationHeaderBearer, token);
+        client.SetToken(OidcConstants.AuthenticationSchemes.AuthorizationHeaderBearer, token);
     }
 
 
     public static void SetBearerToken(this HttpRequestMessage request, String token)
     {
-        request.SetToken(AuthenticationSchemes.AuthorizationHeaderBearer, token);
+        request.SetToken(OidcConstants.AuthenticationSchemes.AuthorizationHeaderBearer, token);
     }
 
 
     public static void SetDPoPToken(this HttpRequestMessage request, String accessToken, String proofToken)
     {
-        request.SetToken(AuthenticationSchemes.AuthorizationHeaderDPoP, accessToken);
+        request.SetToken(OidcConstants.AuthenticationSchemes.AuthorizationHeaderDPoP, accessToken);
 
         if (request.Headers.Contains(OidcConstants.HttpHeaders.DPoP))
         {

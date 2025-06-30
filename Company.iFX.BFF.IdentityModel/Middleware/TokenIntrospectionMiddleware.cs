@@ -3,7 +3,6 @@
 using Company.iFX.BFF.IdentityModel.Client.Messages;
 
 using Microsoft.AspNetCore.Http;
-
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -13,8 +12,14 @@ public class TokenIntrospectionMiddleware : IMiddleware
 {
     #region Members
 
-    private readonly ILogger<TokenIntrospectionMiddleware> _logger;
+    private const String _authorizationHeader = "Authorization";
+    private const String _bearer = "Bearer ";
+    private const String? _tokenIntrospectionFailedError = "Token introspection failed: {Error}";
+    private const String _tokenIsNotActiveRevokedOrExpired = "Token is not active (revoked or expired).";
+    private const String? _tokenIsNotActiveRevokedOrExpiredTokenToken = "Token is not active (revoked or expired). Token: {Token}";
     private readonly IHttpClientFactory _httpClientFactory;
+
+    private readonly ILogger<TokenIntrospectionMiddleware> _logger;
     private readonly TokenIntrospectionOptions _options;
 
     #endregion
@@ -38,11 +43,11 @@ public class TokenIntrospectionMiddleware : IMiddleware
     {
         _logger.LogDebug("TokenIntrospectionMiddleware invoked for {Path}", context.Request.Path);
 
-        String? header = context.Request.Headers["Authorization"].FirstOrDefault();
+        String? header = context.Request.Headers[_authorizationHeader].FirstOrDefault();
 
-        if (!String.IsNullOrEmpty(header) && header.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+        if (!String.IsNullOrEmpty(header) && header.StartsWith(_bearer, StringComparison.OrdinalIgnoreCase))
         {
-            String token = header.Substring("Bearer ".Length).Trim();
+            String token = header.Substring(_bearer.Length).Trim();
 
             HttpClient client = _httpClientFactory.CreateClient();
 
@@ -58,15 +63,15 @@ public class TokenIntrospectionMiddleware : IMiddleware
             if (response.IsError)
             {
                 context.Response.StatusCode = (Int32)HttpStatusCode.InternalServerError;
-                _logger.LogError("Token introspection failed: {Error}", response.Error);
+                _logger.LogError(_tokenIntrospectionFailedError, response.Error);
                 return;
             }
-            
+
             if (!response.IsActive)
             {
-                _logger.LogWarning("Token is not active (revoked or expired). Token: {Token}", token);
+                _logger.LogWarning(_tokenIsNotActiveRevokedOrExpiredTokenToken, token);
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                await context.Response.WriteAsync("Token is not active (revoked or expired).");
+                await context.Response.WriteAsync(_tokenIsNotActiveRevokedOrExpired);
                 return;
             }
         }

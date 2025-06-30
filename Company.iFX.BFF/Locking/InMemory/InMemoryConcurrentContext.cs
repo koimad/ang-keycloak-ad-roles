@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Company.iFX.BFF.Locking.InMemory;
 
-internal class InMemoryConcurrentContext : IConcurrentContext
+public class InMemoryConcurrentContext : IConcurrentContext
 {
     #region Methods
 

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Company.iFX.BFF;
 
-internal class AuthSession : IAuthSession
+public class AuthSession : IAuthSession
 {
     #region Members
 
@@ -37,7 +37,6 @@ internal class AuthSession : IAuthSession
     #endregion
 
     #region Constructors
-
 
     public AuthSession(IHttpContextAccessor httpContextAccessor,
         IRedirectUriFactory redirectUriFactory,
@@ -106,39 +105,17 @@ internal class AuthSession : IAuthSession
 
     #endregion
 
-    #region Internal
-
-    internal static String? GetAccessTokenFromSession(ISession session)
-    {
-        return session.GetString(TokenKey);
-    }
-
-
-    internal static Boolean HasAccessToken(ISession session)
-    {
-        return session.Keys.Contains(TokenKey);
-    }
-
-
-    internal async Task ProlongExpirationDate(Int32 seconds)
-    {
-        DateTime? current = GetDateTime(ExpiryKey);
-
-        if (current == null)
-        {
-            throw new NotSupportedException("Cannot prolong access token validity. Can only prolong based on expiry date. But the Expiry was not set in the session.");
-        }
-
-        await SetDateTimeAsync(ExpiryKey, current.Value.AddSeconds(seconds));
-    }
-
-    #endregion
-
     #region Public
 
     public String? GetAccessToken()
     {
         return GetAccessTokenFromSession(Session);
+    }
+
+
+    public static String? GetAccessTokenFromSession(ISession session)
+    {
+        return session.GetString(TokenKey);
     }
 
 
@@ -172,6 +149,12 @@ internal class AuthSession : IAuthSession
     }
 
 
+    public static Boolean HasAccessToken(ISession session)
+    {
+        return session.Keys.Contains(TokenKey);
+    }
+
+
     public Boolean HasAccessToken()
     {
         return Session.Keys.Contains(TokenKey);
@@ -195,7 +178,7 @@ internal class AuthSession : IAuthSession
         await SetUserPreferredLandingPageAsync(userPreferredLandingPage);
 
         String redirectUri = _redirectUriFactory.DetermineRedirectUri(
-            _httpContextAccessor.HttpContext,
+            _httpContextAccessor.HttpContext!,
             _oidcProxyReservedEndpointName.ToString()
         );
 
@@ -207,6 +190,19 @@ internal class AuthSession : IAuthSession
         }
 
         return authorizeRequest;
+    }
+
+
+    public async Task ProlongExpirationDate(Int32 seconds)
+    {
+        DateTime? current = GetDateTime(ExpiryKey);
+
+        if (current == null)
+        {
+            throw new NotSupportedException("Cannot prolong access token validity. Can only prolong based on expiry date. But the Expiry was not set in the session.");
+        }
+
+        await SetDateTimeAsync(ExpiryKey, current.Value.AddSeconds(seconds));
     }
 
 

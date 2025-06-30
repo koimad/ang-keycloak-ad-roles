@@ -2,7 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace Company.iFX.BFF.OpenIdConnect;
 
-internal class DefaultClaimsTransformation : IClaimsTransformation
+public class DefaultClaimsTransformation : IClaimsTransformation
 {
     #region Methods
 

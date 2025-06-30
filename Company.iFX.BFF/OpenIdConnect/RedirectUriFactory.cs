@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Company.iFX.BFF.OpenIdConnect;
 
-internal class RedirectUriFactory : IRedirectUriFactory
+public class RedirectUriFactory : IRedirectUriFactory
 {
     #region Members
 

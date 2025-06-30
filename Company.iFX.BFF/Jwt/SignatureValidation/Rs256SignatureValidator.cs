@@ -7,7 +7,7 @@ using Jose;
 
 namespace Company.iFX.BFF.Jwt.SignatureValidation;
 
-internal class Rs256SignatureValidator : SignatureValidator
+public class Rs256SignatureValidator : SignatureValidator
 {
     #region Methods
 

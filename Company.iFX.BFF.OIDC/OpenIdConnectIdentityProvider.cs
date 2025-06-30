@@ -7,12 +7,11 @@ using Company.iFX.BFF.IdentityModel;
 using Company.iFX.BFF.IdentityModel.Client.Extensions;
 using Company.iFX.BFF.IdentityModel.Client.Messages;
 using Company.iFX.BFF.IdentityProviders;
-using Company.iFX.BFF.Logging;
 using Company.iFX.BFF.OIDC.Client;
 using Company.iFX.BFF.OpenIdConnect;
 
 using Microsoft.Extensions.Caching.Memory;
-
+using Microsoft.Extensions.Logging;
 
 using TokenResponse = Company.iFX.BFF.IdentityProviders.TokenResponse;
 
@@ -37,7 +36,7 @@ public class OpenIdConnectIdentityProvider : IIdentityProvider
 
     #region Constructors
 
-    public OpenIdConnectIdentityProvider(ILogger logger, IMemoryCache cache, HttpClient httpClient, OpenIdConnectConfig configuration)
+    public OpenIdConnectIdentityProvider(ILogger<OpenIdConnectIdentityProvider> logger, IMemoryCache cache, HttpClient httpClient, OpenIdConnectConfig configuration)
     {
         _logger = logger;
         _cache = cache;
@@ -76,7 +75,7 @@ public class OpenIdConnectIdentityProvider : IIdentityProvider
 
     protected virtual async Task<DiscoveryDocument?> ObtainDiscoveryDocument(String endpointAddress)
     {
-        DiscoveryDocumentResponse? discoveryDocument = await _httpClient.GetDiscoveryDocumentAsync(endpointAddress);
+        DiscoveryDocumentResponse discoveryDocument = await _httpClient.GetDiscoveryDocumentAsync(endpointAddress);
 
         return new DiscoveryDocument {
             authorization_endpoint = discoveryDocument.AuthorizeEndpoint,
@@ -107,7 +106,7 @@ public class OpenIdConnectIdentityProvider : IIdentityProvider
             DisablePushedAuthorization = _configuration.DisablePushedAuthorization
         });
 
-        AuthorizeState? request = await client.PrepareLoginAsync(GetFrontChannelParameters());
+        AuthorizeState request = await client.PrepareLoginAsync(GetFrontChannelParameters());
 
         Debug.Assert(request.StartUrl != null);
         Debug.Assert(request.CodeVerifier != null);
@@ -152,7 +151,7 @@ public class OpenIdConnectIdentityProvider : IIdentityProvider
     public async Task<IEnumerable<KeySet>> GetJwksAsync(Boolean invalidateCache = false)
     {
         DiscoveryDocument openIdConfiguration = await GetDiscoveryDocument();
-        String? jwksUri = openIdConfiguration.jwks_uri;
+        String jwksUri = openIdConfiguration.jwks_uri ?? String.Empty;
 
         if (!invalidateCache && _cache.TryGetValue(jwksUri, out Object? keySet) && keySet != null)
         {
@@ -195,7 +194,7 @@ public class OpenIdConnectIdentityProvider : IIdentityProvider
             Parameters = {
                 { OidcConstants.TokenRequest.Code, code },
                 { OidcConstants.TokenRequest.RedirectUri, redirectUri },
-                { OidcConstants.TokenRequest.CodeVerifier, codeVerifier }
+                { OidcConstants.TokenRequest.CodeVerifier, codeVerifier ?? String.Empty }
             }
         });
 
@@ -204,7 +203,7 @@ public class OpenIdConnectIdentityProvider : IIdentityProvider
             throw new ApplicationException($"Unable to retrieve token. OIDC server responded {response.HttpStatusCode}: {response.Raw}");
         }
 
-        await _logger.InformAsync("Queried /token endpoint and obtained id_, access_, and refresh_tokens.");
+        _logger.LogInformation("Queried /token endpoint and obtained id_, access_, and refresh_tokens.");
 
         DateTime expiryDate = DateTime.UtcNow.AddSeconds(response.ExpiresIn);
 
@@ -253,7 +252,7 @@ public class OpenIdConnectIdentityProvider : IIdentityProvider
             throw new TokenRenewalFailedException($"Unable to retrieve token. OIDC server responded {response.HttpStatusCode}: {response.Raw}");
         }
 
-        await _logger.InformAsync("Queried /token endpoint (refresh grant) and obtained id_, access_, and refresh_tokens.");
+        _logger.LogInformation("Queried /token endpoint (refresh grant) and obtained id_, access_, and refresh_tokens.");
 
         DateTime expiresIn = DateTime.UtcNow.AddSeconds(response.ExpiresIn);
 
@@ -277,7 +276,7 @@ public class OpenIdConnectIdentityProvider : IIdentityProvider
             throw new ApplicationException($"Unable to revoke tokens. OIDC server responded {response.HttpStatusCode}: \r\n{response.Raw}");
         }
 
-        await _logger.InformAsync("Token revoked.");
+        _logger.LogInformation("Token revoked.");
     }
 
     #endregion

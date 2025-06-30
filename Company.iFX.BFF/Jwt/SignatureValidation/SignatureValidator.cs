@@ -6,7 +6,7 @@ using Jose;
 
 namespace Company.iFX.BFF.Jwt.SignatureValidation;
 
-internal abstract class SignatureValidator
+public abstract class SignatureValidator
 {
     #region Methods
 

@@ -1,14 +1,14 @@
 using Company.iFX.BFF.IdentityProviders;
-using Company.iFX.BFF.Logging;
 using Company.iFX.BFF.ModuleInitializers;
 using Company.iFX.BFF.OpenIdConnect;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Company.iFX.BFF.Endpoints;
 
-internal static class LogoutEndpoint
+public static class LogoutEndpoint
 {
     #region Methods
 
@@ -16,17 +16,19 @@ internal static class LogoutEndpoint
 
     public static async Task<IResult> Get(HttpContext context,
         [FromServices] AuthSession authSession,
-        [FromServices] ILogger logger,
+        [FromServices] ILoggerFactory loggerFactory,
         [FromServices] ProxyOptions proxyOptions,
         [FromServices] IRedirectUriFactory redirectUriFactory,
         [FromServices] IIdentityProvider identityProvider)
     {
+        ILogger logger = loggerFactory.CreateLogger(typeof(LogoutEndpoint));
+
         if (!authSession.HasAccessToken())
         {
             return Results.BadRequest();
         }
 
-        await logger.InformAsync("Revoking access_token.");
+        logger.LogInformation("Revoking access_token.");
         String? accessToken = context.Session.GetAccessToken();
 
         try
@@ -35,11 +37,11 @@ internal static class LogoutEndpoint
         }
         catch (Exception e) when (e is ApplicationException || e is ArgumentException)
         {
-            await logger.WarnAsync($"Unexpected: Failed to revoke access_token during end-session. Access_token will be removed from the Company.iFX.BFF http-session. " +
+            logger.LogWarning($"Unexpected: Failed to revoke access_token during end-session. Access_token will be removed from the Company.iFX.BFF http-session. " +
                                    $"This event is only visible in the logs. The following error occurred: {e}");
         }
 
-        await logger.InformAsync("Revoking refresh_token.");
+        logger.LogInformation("Revoking refresh_token.");
         String? refreshToken = authSession.GetRefreshToken();
 
         try
@@ -48,7 +50,7 @@ internal static class LogoutEndpoint
         }
         catch (Exception e) when (e is ApplicationException || e is ArgumentException)
         {
-            await logger.WarnAsync($"Unexpected: Failed to revoke refresh_token during end-session. Refresh_token will be removed from the Company.iFX.BFF http-session. " +
+            logger.LogWarning($"Unexpected: Failed to revoke refresh_token during end-session. Refresh_token will be removed from the Company.iFX.BFF http-session. " +
                                    $"This event is only visible in the logs. The following error occurred: {e}");
         }
 
@@ -66,7 +68,7 @@ internal static class LogoutEndpoint
 
         Uri endSessionEndpoint = await identityProvider.GetEndSessionEndpointAsync(idToken, baseAddress);
 
-        await logger.InformAsync($"Redirect to {endSessionEndpoint}");
+        logger.LogInformation($"Redirect to {endSessionEndpoint}");
 
         return Results.Redirect(endSessionEndpoint.ToString());
     }

@@ -1,6 +1,6 @@
 namespace Company.iFX.BFF.ModuleInitializers;
 
-internal class DefaultAppSettingsSection : IAppSettingsSection
+public class DefaultAppSettingsSection : IAppSettingsSection
 {
     #region Methods
 

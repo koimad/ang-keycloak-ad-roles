@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Company.iFX.BFF.Endpoints;
 
-internal static class ProfileEndpoint
+public static class ProfileEndpoint
 {
     #region Methods
 

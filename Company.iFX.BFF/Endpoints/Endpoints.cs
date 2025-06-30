@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Company.iFX.BFF.Endpoints;
 
-internal static class Endpoints
+public static class Endpoints
 {
     #region Methods
 

@@ -4,9 +4,9 @@ public class TokenIntrospectionOptions
 {
     #region Properties
 
-    public String Address { get; set; } = "";
-    public String ClientId { get; set; } = "";
-    public String ClientSecret { get; set; } = "";
+    public String Address { get; set; } = String.Empty;
+    public String ClientId { get; set; } = String.Empty;
+    public String ClientSecret { get; set; } = String.Empty;
 
     #endregion
 }

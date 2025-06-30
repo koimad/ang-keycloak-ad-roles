@@ -35,7 +35,7 @@ public static class ModuleInitializer
                                         $"and provide a value for {nameof(OidcProxyConfig)}.{nameof(config.Oidc)}.");
         }
 
-        if (!config.Validate(out var errors))
+        if (!config.Validate(out IEnumerable<String> errors))
         {
             throw new NotSupportedException(String.Join(", ", errors));
         }

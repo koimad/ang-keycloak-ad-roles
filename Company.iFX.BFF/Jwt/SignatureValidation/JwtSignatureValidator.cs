@@ -2,13 +2,14 @@ using System.IdentityModel.Tokens.Jwt;
 
 using Company.iFX.BFF.Cryptography;
 using Company.iFX.BFF.IdentityProviders;
-using Company.iFX.BFF.Logging;
+
+using Microsoft.Extensions.Logging;
 
 namespace Company.iFX.BFF.Jwt.SignatureValidation;
 
-internal class JwtSignatureValidator(
+public class JwtSignatureValidator(
     IIdentityProvider identityProvider,
-    ILogger logger,
+    ILogger<JwtSignatureValidator> logger,
     IEncryptionKey? jwtEncryptionKey,
     Rs256SignatureValidator rs256SignatureValidator,
     Hs256SignatureValidator hs256SignatureValidator) : IJwtSignatureValidator
@@ -59,7 +60,7 @@ internal class JwtSignatureValidator(
 
         if (header == null)
         {
-            await logger.WarnAsync("Unable to determine how to validate the access_token. The JWT does not have a header. The signature has not been verified and the JWT is considered to be invalid.");
+            logger.LogWarning("Unable to determine how to validate the access_token. The JWT does not have a header. The signature has not been verified and the JWT is considered to be invalid.");
             return false; 
         }
 
@@ -67,7 +68,7 @@ internal class JwtSignatureValidator(
 
         if (signatureValidator == null)
         {
-            await logger.ErrorAsync("Unable to determine how to validate the access_token. Unable to find a validator for the algorithm specified in the JWT header. The signature has not been verified and the JWT is considered to be invalid.");
+            logger.LogError("Unable to determine how to validate the access_token. Unable to find a validator for the algorithm specified in the JWT header. The signature has not been verified and the JWT is considered to be invalid.");
             return false;
         }
 
