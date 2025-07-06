@@ -44,13 +44,27 @@ $dark-theme: mat.m2-define-dark-theme(
 
 // Setup Core Stuff.
 
+html {
+  color-scheme: light;
+  @include mat.theme((
+    color: mat.$violet-palette,
+    typography: (
+      plain-family: Roboto,
+      brand-family: Open Sans,
+      bold-weight: 900,
+      medium-weight: 500,
+      regular-weight: 300,    
+      
+    ),
+    //density: 0
+  ));
+}
+
 body {
-  margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  margin: 0;  
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  
+  min-height: 100vh;  
 }
 
 ol,
@@ -65,7 +79,7 @@ a {
 
 code {
   font-style: italic;
-  font-size: 1.1em;
+  font-size: 1.2rem;
 }
 
 img {
@@ -75,15 +89,16 @@ img {
 
 .section {
   margin: 20px;
-  line-height: 1.6;
+  line-height: 1.6rem;
 }
 
 header h1 {
-  font-size: 2em;
-  margin-bottom: 0.5em;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
 }
 
 .description {
   color: #555;
-  margin-bottom: 1.5em;
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
 }

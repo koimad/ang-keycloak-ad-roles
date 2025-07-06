@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
-import { UserProfileComponent } from './components/user-profile/user-profile.component';
-import { ModelsComponent } from './components/models/models.component';
+//import { UserProfileComponent } from './components/user-profile/user-profile.component';
+//import { ModelsComponent } from './components/models/models.component';
 import { canActivateAuthRole } from './guards/auth-role.guard';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 
@@ -16,17 +16,20 @@ export const routes: Routes = [
   },
   {
     path: 'models',
-    component: ModelsComponent,
     canActivate: [canActivateAuthRole],
+    loadChildren: () =>  import('../app/modules/models.module').then(m=> m.routes),
     data: { role: 'models-user' }
   },
   {
     path: 'profile',
-    component: UserProfileComponent,
     canActivate: [canActivateAuthRole],
+    loadChildren: () =>  import('../app/modules/user-profile.module').then(m=> m.routes),
     data: { role: 'aspire-editor' }
   },
-  { path: 'forbidden', component: ForbiddenComponent },
+  { 
+    path: 'forbidden', 
+    loadChildren: () =>  import('../app/modules/forbidden.module').then(m=> m.routes)
+   },
   {
     path: 'signout-callback-oidc',
     redirectTo: 'home'

@@ -2,13 +2,16 @@ import { Component, effect, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthService} from '../../services/AuthService'
 
-import {MatIconModule} from '@angular/material/icon';
-import {MatButtonModule} from '@angular/material/button';
-import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatIcon} from '@angular/material/icon';
+import {MatButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-menu',
-  imports: [RouterModule, MatToolbarModule, MatButtonModule, MatIconModule],
+  imports: [
+    RouterModule,
+    MatButton,
+    MatIcon
+],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })

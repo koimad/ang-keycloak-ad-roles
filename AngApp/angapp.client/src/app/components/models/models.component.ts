@@ -1,6 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject} from '@angular/core';
 import { User } from '../../models/user.model';
-//import Keycloak from 'keycloak-js';
 import { HasRolesEnabledDirective } from '../../directives/has-roles-enabled.directive';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
