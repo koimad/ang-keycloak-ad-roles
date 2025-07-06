@@ -6,3 +6,6 @@
 **/**/dist
 AngApp/angapp.client/dist/angapp.client/3rdpartylicenses.txt
 AngApp/angapp.client/dist/
+AngApp/AngApp.Server/wwwroot/3rdpartylicenses.txt
+AngApp/AngApp.Server/wwwroot/prerendered-routes.json
+AngApp/AngApp.Server/wwwroot/browser
