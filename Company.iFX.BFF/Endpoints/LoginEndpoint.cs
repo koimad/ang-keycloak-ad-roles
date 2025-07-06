@@ -5,6 +5,7 @@ using Company.iFX.BFF.OpenIdConnect;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 
 namespace Company.iFX.BFF.Endpoints;
 
@@ -14,9 +15,10 @@ public static class LoginEndpoint
 
     #region Public
 
-    public static async Task Get(HttpContext context,
+    public static async Task Get(HttpContext context, 
+        [FromQuery] String? redirectUrl,
         [FromServices] EndpointName endpointName,
-        [FromServices] AuthSession authSession,
+        [FromServices] IAuthSession authSession,
         [FromServices] ILoggerFactory loggerFactory,
         [FromServices] IRedirectUriFactory redirectUriFactory,
         [FromServices] IIdentityProvider identityProvider)
@@ -35,6 +37,8 @@ public static class LoginEndpoint
             }
 
             logger.LogInformation($"Redirect({authorizeRequest.AuthorizeUri})");
+
+            await authSession.SetUserPreferredLandingPageAsync(redirectUrl);
 
             context.Response.Redirect(authorizeRequest.AuthorizeUri.ToString());
         }

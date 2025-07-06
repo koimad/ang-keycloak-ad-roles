@@ -69,8 +69,8 @@ public class Program
                 policy =>
                 {
                     policy.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
+                        .WithMethods("GET","PUT","POST","DELETE","OPTIONS")
+                        .WithHeaders("Content-Type","Authorization","Content-Length","X-Requested-With")
                         ;
                 });
         });

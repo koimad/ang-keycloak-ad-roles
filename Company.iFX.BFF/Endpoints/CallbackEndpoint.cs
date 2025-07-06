@@ -65,9 +65,11 @@ public static class CallbackEndpoint
 
             JwtPayload? jwtPayload = tokenParser.ParseJwtPayload(tokenResponse.access_token);
 
+            String landingPage = authSession.GetUserPreferredLandingPage() ?? proxyOptions.LandingPage.ToString();
+
             return await authenticationCallbackHandler.OnAuthenticated(context,
                 jwtPayload,
-                proxyOptions.LandingPage.ToString(),
+                landingPage,
                 userPreferredLandingPage);
         }
         catch (Exception e)

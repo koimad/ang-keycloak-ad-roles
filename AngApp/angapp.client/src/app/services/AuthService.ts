@@ -16,7 +16,15 @@ export class AuthService {
     }
 
     public login(): void {
-        location.href = '/auth/login';
+
+        const url = `/auth/login?redirectUrl=/models`;
+        //const url = `/auth/login`;
+
+        console.log(url);
+
+        location.href = url;
+              
+
         this.markLoggedIn();
         this.refreshSessionStatus();
     }

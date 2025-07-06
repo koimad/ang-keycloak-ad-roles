@@ -4,9 +4,12 @@ namespace Company.iFX.BFF;
 
 public interface IAuthSession
 {
+
     Boolean HasIdToken();
 
+
     Boolean HasAccessToken();
+
 
     String? GetIdToken();
 
@@ -18,4 +21,10 @@ public interface IAuthSession
 
 
     Task<AuthorizeRequest> InitiateAuthenticationSequence(String userPreferredLandingPage);
+
+
+    Task SetCodeVerifierAsync(String codeVerifier);
+
+
+    Task SetUserPreferredLandingPageAsync(String? userPreferredLandingPage);
 }
