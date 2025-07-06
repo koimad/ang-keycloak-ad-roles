@@ -6,13 +6,13 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
 const PROXY_CONFIG = [
     {
         context: [
-            "/externalapi/*",            
+            "/externalapi/*",
             "/auth/*",
             "/auth/*/*",
-            
         ],
         target,
         secure: false,
+        changeOrigin: false,
         headers: {
             Connection: 'Keep-Alive'
         }
