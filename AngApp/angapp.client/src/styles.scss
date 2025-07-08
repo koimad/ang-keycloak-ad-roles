@@ -6,14 +6,16 @@
 @include mat.elevation-classes();
 @include mat.app-background();
 
+
 // Define a light theme
 $light-theme: mat.m2-define-light-theme(
   (
     color: (
       primary: mat.m2-define-palette(mat.$m2-indigo-palette, 500),
-      accent: mat.m2-define-palette(mat.$m2-pink-palette, A200),
+      accent: mat.m2-define-palette(mat.$m2-blue-palette, A200),
       tertiary: mat.m2-define-palette(mat.$m2-indigo-palette, 300),
       warn: mat.m2-define-palette(mat.$m2-red-palette),
+      
     ),
     typography: mat.m2-define-typography-config(),
     density: 0,
@@ -45,26 +47,30 @@ $dark-theme: mat.m2-define-dark-theme(
 // Setup Core Stuff.
 
 html {
-  color-scheme: light;
-  @include mat.theme((
-    color: mat.$violet-palette,
-    typography: (
-      plain-family: Roboto,
-      brand-family: Open Sans,
-      bold-weight: 900,
-      medium-weight: 500,
-      regular-weight: 300,    
-      
-    ),
-    //density: 0
-  ));
+    color-scheme: light;
+    @include mat.theme(( 
+        color: mat.$blue-palette,
+        typography: ( 
+                        plain-family: Roboto, 
+                        brand-family: Open Sans, 
+                        bold-weight: 900, 
+                        medium-weight: 500,
+                        regular-weight: 30
+                    ),
+        density: 0
+    ))
 }
 
 body {
-  margin: 0;  
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;  
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    --mat-toolbar-container-background-color: #eaeaea;    
+
+    .dark-theme {
+        --mat-toolbar-container-background-color: #333333;        
+    }
 }
 
 ol,
@@ -74,7 +80,7 @@ ul {
 
 a {
   text-decoration: none;
-  color: inherit;
+  //color: inherit;
 }
 
 code {
@@ -98,7 +104,7 @@ header h1 {
 }
 
 .description {
-  color: #555;
+  //color: #555;
   margin-bottom: 1.5rem;
   font-size: 1.3rem;
 }

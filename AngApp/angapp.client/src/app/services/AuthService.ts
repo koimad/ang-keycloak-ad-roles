@@ -1,6 +1,7 @@
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Injectable, signal} from "@angular/core";
 import {User} from "../models/user.model";
+import { ActivatedRoute } from "@angular/router";
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -11,14 +12,18 @@ export class AuthService {
 
     public user: User | null = null;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private route: ActivatedRoute) {
         this.refreshSessionStatus();
     }
 
     public login(): void {
 
-        const url = `/auth/login?redirectUrl=/models`;
-        //const url = `/auth/login`;
+        let url = '/auth/login';
+        let dest = this.route.snapshot.queryParamMap.get('destination');
+
+        if (dest) {
+            url = `/auth/login?redirectUrl=/${dest}`;
+        }
 
         console.log(url);
 

@@ -1,11 +1,19 @@
 @use '@angular/material' as mat;
-.menu {
-  display: flex;
-  justify-content: space-between;
-  background: #e1e1e1;
-  padding: 10px;
-  color: #3c3c3c;
-  align-items: center;
+
+:host {
+    @include mat.toolbar-overrides((
+    //    container-background-color: orange,
+    //    container-text-color: red
+    ));
+    }
+nav {
+    display: flex;
+    justify-content: space-between;
+    //background: var(--mat-container-color);
+    padding: 10px;
+    //color: #3c3c3c;
+    align-items: center;
+    width: 100%
 }
 
 .developer-status {
@@ -28,11 +36,11 @@
 }
 
 a.action-item {
-  color: #3c3c3c;
+  //color: #3c3c3c;
   text-decoration: none;
 }
 
   a.action-item:hover {
-    background: #bfbfbf;
+    //background: #bfbfbf;
     border-radius: 5px;
   }

@@ -3,10 +3,11 @@ import { User } from '../../models/user.model';
 import { HasRolesEnabledDirective } from '../../directives/has-roles-enabled.directive';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'app-models',
-    imports: [HasRolesEnabledDirective],
+    imports: [HasRolesEnabledDirective,MatButton],
     templateUrl: 'models.component.html',
     styleUrls: [`models.component.scss`],
     providers: [HttpClient]

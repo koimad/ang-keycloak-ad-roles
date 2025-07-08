@@ -23,8 +23,8 @@ import { AuthGuardData } from './AuthGuardData';
     return true;
   }
 
-  const router = inject(Router);
-  return router.parseUrl('/forbidden');
+     const router = inject(Router);
+     return router.parseUrl(`/forbidden?destination=${route.url}`);
  };
 
  export const canActivateAuthRole = createAuthGuard<CanActivateFn>(isAccessAllowed); 

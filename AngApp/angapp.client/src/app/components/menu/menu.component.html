@@ -1,31 +1,33 @@
-<nav class="menu">
-  <div class="developer-status"><strong>Keycloak Events:</strong> {{ keycloakStatus }}</div>
+<mat-toolbar>
+    <nav>
+        <div class="developer-status"><strong>Keycloak Events:</strong> {{ keycloakStatus }}</div>
 
-  <div class="actions">
-    <button mat-raised-button color="tertiary" class="action-item" routerLink="/" >
-        <mat-icon>home</mat-icon>
-        Home
-    </button>
-    <button mat-raised-button color="tertiary" class="action-item" routerLink="/models" >
-        <mat-icon>outbound</mat-icon>
-        Models
-    </button>
+        <div class="actions">
+            <button mat-raised-button color="tertiary" class="action-item" routerLink="/">
+                <mat-icon>home</mat-icon>
+                Home
+            </button>
+            <button mat-raised-button color="tertiary" class="action-item" routerLink="/models">
+                <mat-icon>outbound</mat-icon>
+                Models
+            </button>
 
-    <button mat-raised-button color="tertiary" class="action-item" routerLink="/profile" >
-        <mat-icon>person</mat-icon>
-        My Profile
-    </button>   
+            <button mat-raised-button color="tertiary" class="action-item" routerLink="/profile">
+                <mat-icon>person</mat-icon>
+                My Profile
+            </button>
 
-    @if (!authenticated) {
-      <button mat-raised-button color="primary" class="action-item"  (click)="login()">
-        <mat-icon>login</mat-icon>
-        Login
-      </button>
-    } @else {
-      <button mat-raised-button color="primary" class="action-item"  (click)="logout()">
-        <mat-icon>logout</mat-icon>
-        Logout
-      </button>
-    }
-  </div>
-</nav>
+            @if (!authenticated) {
+            <button mat-raised-button color="primary" class="action-item" (click)="login()">
+                <mat-icon>login</mat-icon>
+                Login
+            </button>
+            } @else {
+            <button mat-raised-button color="primary" class="action-item" (click)="logout()">
+                <mat-icon>logout</mat-icon>
+                Logout
+            </button>
+            }
+        </div>
+    </nav>
+</mat-toolbar>

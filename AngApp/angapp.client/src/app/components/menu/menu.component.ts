@@ -3,14 +3,16 @@ import { RouterModule } from '@angular/router';
 import { AuthService} from '../../services/AuthService'
 
 import {MatIcon} from '@angular/material/icon';
-import {MatButton} from '@angular/material/button';
+import { MatButton } from '@angular/material/button';
+import { MatToolbar } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-menu',
   imports: [
     RouterModule,
     MatButton,
-    MatIcon
+    MatIcon,
+    MatToolbar
 ],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
