@@ -34,6 +34,14 @@ public class TokenRenewalMiddleware : IYarpMiddleware
         {
             await _tokenFactory.RenewAccessTokenIfExpiredAsync(context.TraceIdentifier);
         }
+        catch (TokenRenewalNoUserSessionException e)
+        {
+            _logger.LogError(e, "Error Invoking Token Renewal Endpoint No Valid Session Found to Renew");
+
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.Response.WriteAsync(@"{ ""reason"": ""token_renewal_failed_no_user_session_found"" }");
+            return;
+        }
         catch (TokenRenewalFailedException e)
         {
             _logger.LogError(e,"Error Invoking Token Renewal Endpoint" );

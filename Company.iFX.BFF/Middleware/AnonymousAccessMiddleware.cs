@@ -23,7 +23,7 @@ public class AnonymousAccessMiddleware : IMiddleware
         _oidcProxyReservedEndpointName = oidcProxyReservedEndpointName;
         _authSession = authSession;
         _logger = logger;
-        _httpContextAccessor = httpContextAccessor;
+        _httpContextAccessor = httpContextAccessor;  
     }
 
     #endregion

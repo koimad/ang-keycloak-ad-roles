@@ -19,6 +19,10 @@ namespace Company.iFX.BFF.OIDC;
 
 public class OpenIdConnectIdentityProvider : IIdentityProvider
 {
+    private const String _offlineUserSessionNotFound = "Offline user session not found";
+    private const String? _noEndSessionUrlEndpointMessage = "Invalid OpenId configuration. OpenId Configuration MUST contain a value for end_session_endpoint. (https://openid.net/specs/openid-connect-session-1_0-17.html#OPMetadata)";
+    private const String? _noTokenEndpointErrorMessage = "Unable to exchange code for access_token. The well-known/openid-configuration document does not contain a token endpoint.";
+
     #region Members
 
     private readonly IMemoryCache _cache;
@@ -54,15 +58,15 @@ public class OpenIdConnectIdentityProvider : IIdentityProvider
     {
         DiscoveryDocument openIdConfiguration = await GetDiscoveryDocument();
 
-        String? endSessionUrEndpoint = openIdConfiguration.end_session_endpoint;
+        String? endSessionUrlEndpoint = openIdConfiguration.end_session_endpoint;
 
-        if (endSessionUrEndpoint == null)
+        if (endSessionUrlEndpoint == null)
         {
-            throw new NotSupportedException("Invalid OpenId configuration. OpenId Configuration MUST contain a value for end_session_ endpoint. (https://openid.net/specs/openid-connect-session-1_0-17.html#OPMetadata)");
+            throw new NotSupportedException(_noEndSessionUrlEndpointMessage);
         }
 
         String urlEncodedRedirectUri = HttpUtility.UrlEncode(redirectUri);
-        String endSessionUrl = $"{endSessionUrEndpoint}?id_token_hint={idToken}&post_logout_redirect_uri={urlEncodedRedirectUri}";
+        String endSessionUrl = $"{endSessionUrlEndpoint}?id_token_hint={idToken}&post_logout_redirect_uri={urlEncodedRedirectUri}";
         return new Uri(endSessionUrl);
     }
 
@@ -162,8 +166,7 @@ public class OpenIdConnectIdentityProvider : IIdentityProvider
 
         if (response.IsError)
         {
-            throw new ApplicationException($"Unable to JSON Web Key Set. " +
-                                           $"OIDC server responded {response.HttpStatusCode}: {response.Raw}");
+            throw new ApplicationException($"Unable to JSON Web Key Set. OIDC server responded {response.HttpStatusCode}: {response.Raw}");
         }
 
         keySet = JsonWebKeySet.Create(response);
@@ -181,8 +184,7 @@ public class OpenIdConnectIdentityProvider : IIdentityProvider
 
         if (wellKnown.token_endpoint == null)
         {
-            throw new ApplicationException(
-                "Unable to exchange code for access_token. The well-known/openid-configuration document does not contain a token endpoint.");
+            throw new ApplicationException(_noTokenEndpointErrorMessage);
         }
 
         IdentityModel.Client.Messages.TokenResponse response = await _httpClient.RequestTokenAsync(new AuthorizationCodeTokenRequest {
@@ -249,7 +251,9 @@ public class OpenIdConnectIdentityProvider : IIdentityProvider
 
         if (response.IsError)
         {
-            throw new TokenRenewalFailedException($"Unable to retrieve token. OIDC server responded {response.HttpStatusCode}: {response.Raw}");
+            throw response.ErrorDescription.Contains(_offlineUserSessionNotFound)
+                ? new TokenRenewalNoUserSessionException($"Unable to retrieve token. OIDC server responded {response.HttpStatusCode}: {response.Raw}")
+                : new TokenRenewalFailedException($"Unable to retrieve token. OIDC server responded {response.HttpStatusCode}: {response.Raw}");
         }
 
         _logger.LogInformation("Queried /token endpoint (refresh grant) and obtained id_, access_, and refresh_tokens.");

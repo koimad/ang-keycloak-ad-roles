@@ -26,7 +26,7 @@ public class ProxyOptions
 
     private Action<YarpBootstrap> _configureYarpBootstrap = _ => { };
 
-    private readonly List<Type> _customYarpMiddleware = [typeof(TokenRenewalMiddleware), typeof(TokenIntrospectionMiddleware)];
+    private readonly List<Type> _customYarpMiddleware = [typeof(TokenIntrospectionMiddleware), typeof(TokenRenewalMiddleware)]; // Order is important need to renew if required before calling introspection endpoint  
 
     private IOidcProxyBootstrap? _oidcProxyBootstrap;
 

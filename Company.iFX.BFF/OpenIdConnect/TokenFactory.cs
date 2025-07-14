@@ -42,7 +42,7 @@ public class TokenFactory
 
         DateTime expiry = expiryDateInSession.Value.AddSeconds(-30);
         DateTime now = DateTime.UtcNow;
-        return false;
+       
         return expiry <= now;
     }
 
