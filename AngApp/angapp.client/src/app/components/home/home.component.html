@@ -14,7 +14,7 @@
           <button class="copy-btn" (click)="copyToClipboard('myuser')" aria-label="Copy User">
             <i class="copy-icon">📋</i>
           </button>
-        </li> 
+        </li>
         <li>
           <strong>Password:</strong> <code>Password</code>
           <button class="copy-btn" (click)="copyToClipboard('Password')" aria-label="Copy Password">
@@ -23,24 +23,26 @@
         </li>
 
         <!--<li>
-          <strong>User:</strong> <code>model1</code>  (Active Directory Imported User - only with model1 role and models-user, so cannot access profile menu)
-          <button class="copy-btn" (click)="copyToClipboard('myuser')" aria-label="Copy User">
-            <i class="copy-icon">📋</i>
-          </button>
-        </li>
-        <li>
-          <strong>Password:</strong> <code>Pass&#64;word10</code>
-          <button class="copy-btn" (click)="copyToClipboard('Password')" aria-label="Copy Password">
-            <i class="copy-icon">📋</i>
-          </button>
-        </li>-->
+        <strong>User:</strong> <code>model1</code>  (Active Directory Imported User - only with model1 role and models-user, so cannot access profile menu)
+        <button class="copy-btn" (click)="copyToClipboard('myuser')" aria-label="Copy User">
+          <i class="copy-icon">📋</i>
+        </button>
+      </li>
+      <li>
+        <strong>Password:</strong> <code>Pass&#64;word10</code>
+        <button class="copy-btn" (click)="copyToClipboard('Password')" aria-label="Copy Password">
+          <i class="copy-icon">📋</i>
+        </button>
+      </li>-->
 
-      </ul>
-      
-    </section>
+    </ul>
 
-    <div *ngIf="copyMessage()" class="message-box">
+  </section>
+
+  @if (copyMessage()) {
+    <div class="message-box">
       {{ copyMessage() }}
     </div>
-  </main>
+  }
+</main>
 </div>
